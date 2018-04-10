@@ -1,0 +1,84 @@
+@mixin sign_font {
+  font-size: 0.462rem;
+  color: #ffffff;
+}
+$sign_border: 0.01rem solid rgba(255,255,255,0.5);
+$sign_width: 8.5rem;
+.SignButton {
+  width: $sign_width;
+  height: 1.11rem;
+  -webkit-border-radius: 0.2rem;
+  -moz-border-radius: 0.2rem;
+  border-radius: 0.1rem;
+  background: rgba(29,175,226,0.5);
+  @include sign_font;
+}
+.SignLabel {
+  border: 0rem;
+  border-bottom: $sign_border;
+  height: 1.39rem;
+  width: $sign_width;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  line-height: 1.39rem;
+  @include sign_font;
+  &::before {
+    content: '*';
+  }
+  .SignInput {
+    background: rgba(255,255,255,0);
+    border: 0rem;
+    height: 1.39rem;
+    width: 6rem;
+    outline: none;
+    padding-left: 0.3rem;
+    @include sign_font;
+  }
+}
+
+.areaLabel {
+  border: $sign_border;
+  height: 3rem;
+  width: $sign_width;
+  @include sign_font;
+  display: flex;
+  .area {
+    height: 2rem;
+    background: rgba(0,0,0,0);
+    width: 6.3rem;
+    @include sign_font;
+    border: 0;
+    outline: none;
+    margin: 0.05rem 0 0 0.1rem;
+  }
+}
+
+
+.imgLabel {
+  height: 3rem;
+  width: 3rem;
+  border: $sign_border;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  .img {
+    @include sign_font;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    position: absolute;
+    left: 0rem;
+    top: 0rem;
+  }
+  img{
+    height: 100%;
+    width: 100%;
+  }
+}

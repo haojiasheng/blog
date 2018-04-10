@@ -1,0 +1,39 @@
+header {
+  background: #fff;
+  height: 1.57rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  &.hide {
+    display: none;
+  }
+  .avatar {
+    height: 1.02rem;
+    width: 1.02rem;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: 0.5rem;
+    img {
+      width: 1.02rem;
+    }
+  }
+  h2 {
+    font-weight: normal;
+    font-size: 0.463rem;
+    position: absolute;
+    left: 4.5333rem;
+    top: 0.1rem;
+  }
+  span {
+    display: inline-block;
+    margin-right: 0.5rem;
+    color: #6ad2f9;
+    font-size: 0.463rem;
+  }
+  .signIn {
+    margin-left: 0.5rem;
+  }
+}

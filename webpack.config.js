@@ -1,0 +1,124 @@
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanWebpackPlugin = require("clean-webpack-plugin");
+let filename = 'APP/static';
+let devtool = 'source-map';
+let plugins = [
+    new HtmlWebpackPlugin({
+        template: __dirname + "/views/index.ejs",
+        filename: 'index.html'
+    }),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new ExtractTextPlugin("./css/[name]-[hash].css"),
+    new CleanWebpackPlugin(`${filename}/*`, {
+        root: __dirname,
+        verbose: true,
+        dry: false
+    })
+]
+if (process.argv.includes('development')) {
+    plugins.pop()
+}
+if (process.argv.includes('production')) {
+    filename = 'APP/build';
+    devtool = 'none'
+}
+module.exports = {
+    devtool: devtool,
+    entry: __dirname + '/APP/main.jsx',
+    output: {
+        path: __dirname + '/'+filename,
+        filename: 'build.js'
+    },
+    devServer: {
+        contentBase: './APP/static',
+        port: 3000,
+        inline: true,
+        historyApiFallback: true/*,
+        openPage: 'index.ejs'*/
+    },
+    module: {
+        rules: [
+            {
+                test: /(\.js|\.jsx)$/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['env', 'react']/*,
+                        env: {
+                            development: {
+                                plugins: [["react-transform", {
+                                    transforms: [{
+                                        transform: "react-transform-hmr",
+
+                                        imports: ["react"],
+
+                                        locals: ["module"]
+                                    }]
+                                }]]
+                            }
+                        }*/
+                    }
+                },
+                exclude: /node_modules/
+            },
+            {
+                test: /\.(png|jpe?g|gif|svg)$/,
+                use: {
+                    loader: 'url-loader',
+                    options: {
+                        name: 'img/[name][hash:5].[ext]',
+                        limit: 10000
+                    }
+                }
+            },
+            {
+                test: /(\.sass|\.css|\.scss)$/,
+                /*loader: ExtractTextPlugin.extract(
+                        {
+                            loader: 'style-loader'
+                        },
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                modules: true,
+                                localIdentName: '[name]__[local]--[hash:base64:5]'
+                            }
+                        },
+                        {
+                            loader: 'sass-loader'
+                        },
+                        {
+                            loader: 'postcss-loader'
+                        }
+                )*/
+                use: [
+                    {
+                        loader: 'style-loader',
+                    },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            localIdentName: '[name]__[local]--[hash:base64:5]'
+                        }
+                    },
+                    {
+                        loader: 'sass-loader'
+                    },
+                    {
+                        loader: 'postcss-loader'
+                    }
+                ]
+            }
+        ]
+    },
+    plugins: plugins,
+    resolve: {
+        extensions: ['.js', '.jsx']
+    },
+    node: {
+        fs: "empty"
+    }
+}

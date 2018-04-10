@@ -1,0 +1,23 @@
+html,li,ul,span,div,body,p{
+  margin: 0px;
+  padding:0px;
+}
+body{
+  font-size: 0.37rem;
+}
+li {
+  list-style: none;
+}
+html,body{
+  height: 100%;
+}
+:global(#app) {
+  height:100%;
+}
+:global(.wrap) {
+  height: 100%;
+}
+button {
+  border: 0rem;
+  outline: none;
+}

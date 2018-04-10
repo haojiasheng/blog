@@ -1,0 +1,1 @@
+document.getElementsByTagName('html')[0].style.fontSize = document.documentElement.offsetWidth * 0.1 + 'px'

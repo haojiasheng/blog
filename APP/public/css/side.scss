@@ -1,0 +1,107 @@
+.user{
+  width: 8.2222rem;
+  height: 3.67rem;
+  background: #f4f6f9;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  img{
+    width: 1.76rem;
+  }
+  .avatar {
+    width: 1.76rem;
+    height: 1.76rem;
+    overflow: hidden;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    margin-left: 0.68rem;
+  }
+  .userMsg{
+    height: 1.76rem;
+    margin-left: 0.7rem;
+    font-size: 0.38888rem;
+    .nikename {
+      span {
+        display: inline-block;
+        width: 3.8rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        ~span {
+          width: 0.5rem;
+        }
+      }
+    }
+    .bio{
+      width: 4.2rem;
+      height: 1.6rem;
+      margin-top: 0.1rem;
+      color: #666;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      span {
+        color: #999;
+      }
+    }
+  }
+}
+.side {
+  width: 8.2222rem;
+  height: 100%;
+  background: #ffffff;
+  z-index: 999;
+  position: fixed;
+  left: 0rem;
+  top: 0rem;
+  ul{
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 0.56rem;
+    li{
+      height: 1.56rem;
+      width: 7.6622rem;
+      display: flex;
+      align-items: center;
+      border-bottom: 0.027rem solid #999999;
+      opacity: 0.3;
+      span {
+        margin-left: 0.3rem;
+      }
+      &.active{
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.signout {
+  width: 8.2222rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 5rem;
+  button{
+    height: 0.9rem;
+    width: 5rem;
+    font-size: 0.5rem;
+    -webkit-border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+    border-radius: 0.5rem;
+    background: #aaa;
+    color: #fff;
+    outline: none;
+    border: none;
+  }
+}
+
+.screen {
+  position: absolute;
+  left: 0rem;
+  top: 0rem;
+  height: 100%;
+  width: 100%;
+  background: rgba(0,0,0,0.3);
+  z-index: 10;
+}
