@@ -16,7 +16,7 @@ function pageState(search = 0, action) {
     switch (action.type) {
         case 'search':
             return 1;
-        case 'signup':
+        case 'signUpPage':
             return 3;
         case 'back':
             return 0;

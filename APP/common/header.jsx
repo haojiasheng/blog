@@ -11,7 +11,7 @@ class Header extends Component{
                 {
                     user.Email ? (
                         <div className={style.avatar}>
-                            <img src={require('../public/img/avatar.jpg')} />
+                            <img src={require('../public/img/avatar/avatar.jpg')} />
                         </div>
                     ) : (
                         <span onClick={this.signIn.bind(this)} className={style.signIn}>注册/登陆</span>
@@ -23,7 +23,7 @@ class Header extends Component{
         )
     }
     signIn () {
-        this.context.router.history.push('/signup')
+        this.context.router.history.push('/signUp')
     }
 }
 Header.propsType = {

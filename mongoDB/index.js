@@ -8,10 +8,6 @@ const User = mongolass.model('User', {
         type: 'string',
         required: true
     },
-    name: {
-        type: 'string',
-        required: true
-    },
     password: {
         type: 'string',
         required: true
@@ -35,6 +31,6 @@ const User = mongolass.model('User', {
 
 User.index({Email: 1}, {unique: true}).exec();
 
-module.export = {
+module.exports = {
     User
 };

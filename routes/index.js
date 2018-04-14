@@ -1,4 +1,4 @@
 module.exports = function (app) {
     app.use('/',require('./home'));
-    app.use('/user', require('./user'))
+    app.use('/signUp', require('./signUp'));
 };

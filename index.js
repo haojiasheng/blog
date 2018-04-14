@@ -10,10 +10,11 @@ const bodyParser = require('body-parser');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(express.static(path.join(__dirname, 'APP')));
+app.use(express.static(path.join(__dirname, 'APP/static')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
 
 app.use(session({
     name: config.session.key,

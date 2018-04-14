@@ -35,12 +35,12 @@ export class SignTextarea extends Component{
 
 export class SignImg extends Component{
     render () {
-        const {content, upAvatar} = this.props
+        const { upAvatar, imgUrl, content} = this.props;
         return (
             <label className={style.imgLabel}>
                 点击上传图片
                 <input onChange={upAvatar} accept={'image/*'} ref={content} type='file' className={style.img}/>
-                <img />
+                <img src={imgUrl} className={imgUrl ?  style.upImg : ''}/>
             </label>
         )
     }

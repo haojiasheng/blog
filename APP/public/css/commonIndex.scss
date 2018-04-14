@@ -78,7 +78,13 @@ $sign_width: 8.5rem;
     top: 0rem;
   }
   img{
-    height: 100%;
-    width: 100%;
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    &.upImg {
+      display: block;
+      width: 3rem;
+    }
   }
 }

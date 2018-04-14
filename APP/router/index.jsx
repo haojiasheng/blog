@@ -19,7 +19,7 @@ const routes = [
         exact: false
     },
     {
-        path: '/signup',
+        path: '/signUp',
         component: SignUp,
         exact: false
     }
