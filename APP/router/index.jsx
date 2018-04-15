@@ -2,6 +2,7 @@ import React from 'react';
 import {Router, Route, BrowserRouter, Switch} from 'react-router-dom';
 import Header from '../common/header';
 import Search from '../common/search';
+import Prompt from '../common/prompt';
 import Side from '../common/side';
 import home from '../pages/home';
 import SearchPage from '../pages/search';
@@ -32,6 +33,7 @@ const router = (
             {true && <Header />}
             {true && <Search />}
             {false && <Side/>}
+            {<Prompt />}
             <Switch>
                 {routes.map((route, index) => (
                     <Route key={index} path={route.path} component={route.component} exact={route.exact} />

@@ -5,7 +5,6 @@ import fetchPosts from '../lib/asyncAction';
 
 class Main extends Component {
     componentWillMount () {
-        console.log(this.props)
         const {postInit, userInit} = this.props;
         postInit();
         userInit();

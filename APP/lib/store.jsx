@@ -36,6 +36,18 @@ function user(user = {}, action) {
     }
 }
 
-const store = createStore(combineReducers({posts, pageState, user}), applyMiddleware(thunk));
+function prompt(prompt = {status: 1}, action) {
+    switch (action.type) {
+        case 'prompt':
+            delete action.type;
+            return action;
+        case 'removePrompt':
+            return {status: 1};
+        default:
+            return prompt
+    }
+}
+
+const store = createStore(combineReducers({posts, pageState, user, prompt}), applyMiddleware(thunk));
 
 export default store

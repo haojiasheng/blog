@@ -23,7 +23,7 @@ class User extends Component{
         return (
             <div className={style.user}>
                 <div className={style.avatar}>
-                    <img  src={require('../public/img/avatar.jpg')} />
+                    <img  src={require('../public/img/avatar/avatar.jpg')} />
                 </div>
                 <div className={style.userMsg}>
                     <div className={style.nikename}>
