@@ -21,7 +21,7 @@ if (process.argv.includes('development')) {
     plugins.pop()
 }
 if (process.argv.includes('production')) {
-    filename = 'APP/build';
+    filename = 'APP/static';
     devtool = 'none'
 }
 module.exports = {
@@ -29,11 +29,12 @@ module.exports = {
     entry: __dirname + '/APP/main.jsx',
     output: {
         path: __dirname + '/'+filename,
-        filename: 'build.js'
+        filename: 'build.js',
+        chunkFilename: '[name].[chunkhash:5].chunk.js'
     },
     devServer: {
         contentBase: './APP/static',
-        port: 3000,
+        port: 3001,
         inline: true,
         historyApiFallback: true/*,
         openPage: 'index.ejs'*/

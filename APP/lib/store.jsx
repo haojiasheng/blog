@@ -4,31 +4,16 @@ import thunk from 'redux-thunk'
 function posts(posts = [], action) {
     switch (action.type) {
         case 'postAdd':
-            return posts
+            return posts;
         case 'postInit':
-            return posts
+            return posts;
         default:
             return posts
     }
 }
 
-function pageState(search = 0, action) {
+function user(user = null, action) {
     switch (action.type) {
-        case 'search':
-            return 1;
-        case 'signUpPage':
-            return 3;
-        case 'back':
-            return 0;
-        default:
-            return search
-    }
-}
-
-function user(user = {}, action) {
-    switch (action.type) {
-        case 'userCreate':
-            return action.user;
         case 'userInit':
             return action.user;
         default:
@@ -40,6 +25,7 @@ function prompt(prompt = {status: 1}, action) {
     switch (action.type) {
         case 'prompt':
             delete action.type;
+            action.status = 0;
             return action;
         case 'removePrompt':
             return {status: 1};
@@ -48,6 +34,41 @@ function prompt(prompt = {status: 1}, action) {
     }
 }
 
-const store = createStore(combineReducers({posts, pageState, user, prompt}), applyMiddleware(thunk));
+function path(path = {
+    init: {
+        side: {
+            show: false
+        },
+        header: {
+            show: false,
+            content: '',
+            left: {
+                back: false,
+                content: '',
+                src: ''
+            },
+            right: {
+                content: '',
+                src: '',
+                notSelect_icons: '',
+                icons: ''
+            }
+        },
+        search: {
+            show: false,
+            state: 0
+        }
+    }
+}, action) {
+    switch (action.type) {
+        case 'changePage':
+            path[action.path.path] = action.path;
+            return Object.assign({}, path);
+        default:
+            return path
+    }
+}
+
+const store = createStore(combineReducers({posts, user, prompt, path}), applyMiddleware(thunk));
 
 export default store

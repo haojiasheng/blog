@@ -1,9 +1,6 @@
 header {
   background: #fff;
   height: 1.57rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   position: relative;
   &.hide {
     display: none;
@@ -15,7 +12,8 @@ header {
     -moz-border-radius: 50%;
     border-radius: 50%;
     overflow: hidden;
-    margin-left: 0.5rem;
+    margin: 0.36rem 0 0 0.5rem;
+    float: left;
     img {
       width: 1.02rem;
     }
@@ -24,16 +22,24 @@ header {
     font-weight: normal;
     font-size: 0.463rem;
     position: absolute;
-    left: 4.5333rem;
-    top: 0.1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0.5rem;
   }
   span {
     display: inline-block;
     margin-right: 0.5rem;
     color: #6ad2f9;
     font-size: 0.463rem;
+    float: right;
+    margin-top: 0.46rem;
+    &.collection {
+      width: 0.6rem;
+      height: 0.6rem;
+    }
   }
   .signIn {
     margin-left: 0.5rem;
+    float: left;
   }
 }

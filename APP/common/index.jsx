@@ -3,24 +3,25 @@ import style from '../public/css/commonIndex.scss';
 
 export class SignButton extends Component{
     render () {
-        const {text, signUp} = this.props;
+        const {text, signUp, buttonStyle} = this.props;
         return (
-            <button onClick={signUp} className={style.SignButton}>{text}</button>
+            <button style={buttonStyle} onClick={signUp} className={style.SignButton}>{text}</button>
         )
     }
 }
 
 export class SignInput extends Component{
     render () {
-        const {text, type = 'text', content} = this.props;
+        const {text, type = 'text', content, diffStyle,borderStyle, placeText, contentInspect} = this.props;
         return (
-            <label className={style.SignLabel}>
+            <label style={borderStyle} className={style.SignLabel}>
                 {text}:
-                <input type={type} ref={content} className={style.SignInput}/>
+                <input onChange={contentInspect} placeholder={placeText} type={type} style={diffStyle} ref={content} className={style.SignInput}/>
             </label>
         )
     }
 }
+
 
 export class SignTextarea extends Component{
     render () {
@@ -43,5 +44,48 @@ export class SignImg extends Component{
                 <img src={imgUrl} className={imgUrl ?  style.upImg : ''}/>
             </label>
         )
+    }
+}
+
+export class SignCheck extends Component{
+    render () {
+        const {value, inputKey, name, defaultValue, checkChange, content, backgroundImg} = this.props
+        return (
+            <label className={style.signCheck}>{inputKey}
+                <span className={style.checkWrap}  style={backgroundImg}>
+                    <input onChange={checkChange} ref={content} name={name} defaultChecked={defaultValue} type={'radio'} value={value}></input>
+                </span>
+            </label>
+        )
+    }
+}
+
+export class SignGender extends Component{
+    constructor (props) {
+        super(props);
+        this.state = {
+            gender: 'm'
+        }
+    }
+    render () {
+        const notCheck = {
+            background: `url(${require('../public/img/select_nocheck_ico.png')})`
+        };
+        const check = {
+            background: `url(${require('../public/img/select_check_ico.png')})`
+        };
+        const {content} = this.props;
+        const gender = this.state.gender;
+        return (
+            <div className={style.SignGender}>性别:
+                <SignCheck value={'m'} backgroundImg={gender === 'm' ? check : notCheck} content={gender === 'm' ? content : () => {}} checkChange={this.checkChange.bind(this)} defaultValue={'true'} inputKey={'男'} name={'gender'}/>
+                <SignCheck value={'w'} backgroundImg={gender === 'w' ? check : notCheck} content={gender === 'w' ? content : () => {}} checkChange={this.checkChange.bind(this)} inputKey={'女'} name={'gender'}/>
+            </div>
+        )
+    }
+    checkChange (e) {
+        this.setState({
+            gender: e.target.value
+        })
     }
 }

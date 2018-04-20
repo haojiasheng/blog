@@ -88,3 +88,33 @@ $sign_width: 8.5rem;
     }
   }
 }
+.SignGender {
+  border-bottom: $sign_border;
+  width: $sign_width;
+  height: 1.39rem;
+  @include sign_font;
+  display: flex;
+  align-items: center;
+  &::before {
+    content: '*';
+    padding-left: 0.5rem;
+  }
+}
+.signCheck {
+  display: flex;
+  margin-left: 1rem;
+  justify-content: center;
+  align-items: center;
+  .checkWrap {
+    display: flex;
+    align-items: center;
+    -webkit-background-size: 100%;
+    background-size: 100%;
+    input {
+      width: 0.5rem;
+      height: 0.5rem;
+      cursor: pointer;
+      opacity: 0;
+    }
+  }
+}

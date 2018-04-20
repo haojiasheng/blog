@@ -40,7 +40,7 @@
       color: #666;
       display: -webkit-box;
       -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       overflow: hidden;
       span {
         color: #999;
@@ -52,10 +52,12 @@
   width: 8.2222rem;
   height: 100%;
   background: #ffffff;
-  z-index: 999;
+  z-index: 4;
   position: fixed;
   left: 0rem;
   top: 0rem;
+  animation: sideAppear 1s;
+  transition: all 0.5s;
   ul{
     display: flex;
     flex-wrap: wrap;
@@ -76,8 +78,18 @@
     }
   }
 }
-
-.signout {
+@keyframes sideAppear {
+  from {
+    transform: translateX(-100%);
+  }
+  to{
+    transform: translateX(0);
+  }
+}
+.disAppear {
+  transform: translateX(-100%);
+}
+.signOut {
   width: 8.2222rem;
   display: flex;
   justify-content: center;
@@ -96,12 +108,12 @@
   }
 }
 
-.screen {
-  position: absolute;
-  left: 0rem;
-  top: 0rem;
-  height: 100%;
+.mask{
+  position: fixed;
   width: 100%;
-  background: rgba(0,0,0,0.3);
-  z-index: 10;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 3;
 }

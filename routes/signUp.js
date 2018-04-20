@@ -36,17 +36,18 @@ router.post('/create', function (req, res, next) {
     let password = req.fields.password;
     const repassword = req.fields.repassword;
     let avatar = req.files.avatar;
+    const gender = req.files.gender;
     if (avatar) {
         avatar = req.files.avatar.path.split(path.sep).pop()
     } else {
         avatar = ''
     }
-    let data = {};
+    let data = req.sendData;
     try {
         if (!Email.length) {
             throw new Error('请输入邮箱');
         }
-        if (!(/\d+@\d+\..{2}/).test(Email)) {
+        if (!(/.+@.+\..{2,}$/).test(Email)) {
             throw new Error('邮箱输入格式不正确');
         }
         if (!nikeName.length) {
@@ -63,6 +64,7 @@ router.post('/create', function (req, res, next) {
         }
     } catch (e) {
         data.msg = e.message;
+        data.code = -1;
         res.json(data);
         return
     }
@@ -72,12 +74,16 @@ router.post('/create', function (req, res, next) {
         nikeName,
         bio,
         password,
-        avatar
+        avatar,
+        gender
     };
     User.create(user).then(function (result) {
-        data.data = result.ops[0];
+        user = result.ops[0];
+        delete user.password;
+        data.data = user;
         data.msg = '恭喜！注册成功！';
-        res.json(data)
+        req.session.user = user;
+        res.json(data);
     })
         .catch(function (e) {
             if (req.files.avatar) {

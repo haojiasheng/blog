@@ -6,6 +6,7 @@ const router = require('./routes/index');
 const MongoStore = require('connect-mongo')(session);
 const config = require('config-lite')(__dirname);
 const bodyParser = require('body-parser');
+const pkg = require('./package');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -29,6 +30,16 @@ app.use(session({
     })
 }));
 
+app.use(function (req, res, next) {
+    req.sendData = {
+        code: 0,
+        msg: '操作成功！',
+        data: null
+    };
+    res.setHeader("Access-Control-Allow-Origin", "*")
+    next()
+})
+
 router(app);
 
 var debug = require('debug')('react-note:server');
@@ -45,7 +56,7 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-console.log(port)
+console.log(`${pkg.name} listening on port ${port}`)
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);

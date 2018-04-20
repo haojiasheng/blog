@@ -2,11 +2,20 @@ import React,{Component} from 'react';
 import Search from '../common/search';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import getNextData from '../common/getNextData';
 
 
 class SearchPage extends Component{
     componentWillMount () {
-        this.props.upSearch()
+        getNextData(this,{
+            header: {
+                show: false
+            },
+            search: {
+                show: true,
+                state: 1
+            }
+        });
     }
     render () {
         return (
@@ -15,30 +24,18 @@ class SearchPage extends Component{
             </div>
         )
     }
-    componentWillUnmount () {
-        this.props.unSearch()
-    }
 }
-SearchPage.propsType = {
-    pageState: PropTypes.number.isRequired,
-    upSearch: PropTypes.func.isRequired,
-    unSearch: PropTypes.func.isRequired
-};
 
 const mapStateToProps = function (state) {
     return {
-        pageState: state.pageState
+        path: state.path
     }
 };
 const mapDispatchToProps = {
-    upSearch () {
+    pageChange (path) {
         return {
-            type: 'search'
-        }
-    },
-    unSearch () {
-        return {
-            type: 'back'
+            type: 'changePage',
+            path
         }
     }
 };

@@ -1,25 +1,30 @@
 import React,{Component} from 'react';
 import style from '../public/css/prompt.scss';
 import {connect} from 'react-redux';
+import propTypes from 'prop-types';
 
 class Prompt extends Component{
     constructor (props) {
         super(props)
-        this.state = {
-            status: 1
+    }
+    componentWillReceiveProps () {
+        const {removePrompt} = this.props;
+        if (this.timer) {
+            clearTimeout(this.timer)
+            this.timer = setTimeout(() => {
+                removePrompt()
+            }, 3000);
+        } else {
+            this.timer = setTimeout(() => {
+                removePrompt()
+            }, 3000);
         }
     }
-    componentWillMount () {
-        this.timer = setTimeout(() => {
-            this.setState({
-                status: 1
-            })
-        }, 3000);
-    }
     render () {
+        const {status, message} = this.props.prompt;
         return (
-            !this.state.status && <div className={style.remindBox}>
-                123
+            !status && <div className={style.remindBox}>
+                {message}
             </div>
         )
     }
@@ -29,12 +34,13 @@ class Prompt extends Component{
 }
 
 Prompt.propTypes = {
-
+    prompt: propTypes.object.isRequired,
+    removePrompt: propTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
     prompt: state.prompt
-})
+});
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -46,4 +52,4 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect()(Prompt)
+export default connect(mapStateToProps, mapDispatchToProps)(Prompt)

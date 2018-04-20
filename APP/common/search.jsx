@@ -6,8 +6,12 @@ import {connect} from 'react-redux';
 
 class Search extends Component{
     render () {
+        const {pathname} = this.context.router.route.location;
+        const {path} = this.props;
+        const data = path[pathname] || path.init;
+        const search = data.search;
         return (
-            <div onClick={this.searchPage.bind(this)} className={`${style.search} ${this.props.pageState === 1 ? style.searchPage : (this.props.pageState === 3 ? style.hide : '')}`}>
+            search.show && (<div onClick={this.searchPage.bind(this)} className={`${style.search} ${search.state === 1 ? style.searchPage : ''}`}>
                 <input ref={(input) => this.input = input} onInput={this.searchInput.bind(this)}  />
                 <span  onClick={this.goBack.bind(this)}>取消</span>
                 <div className={style.text}>
@@ -15,11 +19,11 @@ class Search extends Component{
                     <i>搜索</i>
                     <b></b>
                 </div>
-            </div>
+            </div>)
         )
     }
     searchPage  ()  {
-        if (!this.props.pageState) {
+        if (!this.props.path.search) {
             this.input.focus();
             this.context.router.history.push('/search');
         }
@@ -27,18 +31,15 @@ class Search extends Component{
     searchInput () {
     }
     goBack () {
-        this.context.router.history.replace('/')
+        this.context.router.history.goBack()
     }
 }
 Search.contextTypes = {
     router: PropTypes.object,
 };
-Search.propTypes = {
-    pageState: PropTypes.number.isRequired
-};
 
 const mapStateToProps = (state) => ({
-    pageState: state.pageState
+    path: state.path
 });
 
 export default connect(mapStateToProps)(Search)
