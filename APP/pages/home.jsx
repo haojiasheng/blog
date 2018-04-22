@@ -4,6 +4,7 @@ import fetchPosts from '../lib/asyncAction';
 import getNextData from '../common/getNextData';
 import style from '../public/css/home.scss';
 import PropTypes from 'prop-types';
+import {PostAvatar} from '../common/index';
 
 
 class Main extends Component {
@@ -35,8 +36,8 @@ class Main extends Component {
     render () {
         return (
             <ul className={style.list}>
-                <Topic></Topic>
-                <Topic></Topic>
+                <Topic />
+                <Topic />
             </ul>
         )
     }
@@ -47,10 +48,9 @@ class Topic extends Component{
     render () {
         return (
             <li className={style.topic} onClick={this.navigateTo.bind(this)}>
-                <h3>有哪些稳中带皮的操作？</h3>
-                <p>
-                    昊天: 路口见方的昆仑山的数据库浪费的精神力速度快了福建省的绿卡深刻揭示了讲的是离开，发生的灵魂的身份了速度快苏打绿咖啡了圣诞节卡拉斯加水电费江苏大丰kfsdf
-                </p>
+                <PostAvatar />
+                <h3>有哪些稳中带皮的操作？离开家附近的法律岁数大了记得是东方斯卡拉但考虑到所说的看电视来看</h3>
+                {/*<p></p>*/}
                 <div>
                     <span>9644赞同</span>
                     <span className={style.comment}>699评论</span>

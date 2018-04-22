@@ -1,5 +1,56 @@
 .post {
-  h2{
-    font-size: 0.49rem;
+  padding:0.296rem 0.611rem 0 0.435rem;
+  h3{
+    font-size: 0.52rem;
+    margin-top: 0.296rem;
+    line-height: 0.75rem;
+  }
+  p{
+    font-size: 0.41rem;
+    margin-top: 0.5rem;
+    line-height: 0.583rem;
+  }
+  border-bottom: 0.01rem solid #aaa;
+  .count {
+    overflow: hidden;
+    margin: 0.513rem 0 0.666rem 0;
+    color: #646464;
+    font-size: 0.352rem;
+    span{
+      float: right;
+      &.collection{
+        float: left;
+      }
+    }
+  }
+}
+.postDetail{
+}
+.commentInput{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.25rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 10rem;
+  border-top: 0.01rem solid #aaaaaa;
+  box-sizing: border-box;
+  padding: 0.3rem 0;
+  font-size: 0.45rem;
+  color: #bbb;
+  .input{
+    width: 8rem;
+    font-size: 0.5rem;
+    padding-left: 0.6rem;
+    overflow: hidden;
+    outline: none;
+    border: none;
+    color: #000;
+    &:empty::after{
+      content: attr(data-placeholder);
+      color:#bbb;
+    }
   }
 }

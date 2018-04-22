@@ -52,11 +52,14 @@ class Header extends Component{
         let right = data.right;
         const avatar = user.avatar ? user.avatar : (user.gender === 'm' ? 'm.jpg' : 'w.jpg');
         return (
-            data.show && <header>
+            data.show && <div>
+                <div className={style.placeHolder}></div>
+                <header>
                     <LeftDOM left={left} user={user} that={this} avatar={avatar}  />
                     <h2>{data.content}</h2>
                     <RightDOM that={this} right={right} />
-            </header>
+                </header>
+            </div>
         )
     }
     navigateTo (src) {

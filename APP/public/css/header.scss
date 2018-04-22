@@ -1,7 +1,11 @@
 header {
   background: #fff;
   height: 1.57rem;
-  position: relative;
+  width: 100%;
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  left: 0;
   &.hide {
     display: none;
   }
@@ -42,4 +46,9 @@ header {
     margin-left: 0.5rem;
     float: left;
   }
+}
+.placeHolder{
+  position: relative;
+  height: 1.57rem;
+  width: 100%;
 }

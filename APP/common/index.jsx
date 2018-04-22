@@ -69,10 +69,10 @@ export class SignGender extends Component{
     }
     render () {
         const notCheck = {
-            background: `url(${require('../public/img/select_nocheck_ico.png')})`
+            background: `url(${require('../public/img/select_nocheck_ico.png')}) no-repeat`
         };
         const check = {
-            background: `url(${require('../public/img/select_check_ico.png')})`
+            background: `url(${require('../public/img/select_check_ico.png')})  no-repeat`
         };
         const {content} = this.props;
         const gender = this.state.gender;
@@ -87,5 +87,23 @@ export class SignGender extends Component{
         this.setState({
             gender: e.target.value
         })
+    }
+}
+
+export class PostAvatar extends Component{
+    render () {
+        const bgAvatar = {
+            background: `url(${require('../public/img/avatar/avatar.jpg')})`,
+            backgroundSize: '1rem'
+        };
+        return (
+            <div className={style.postAvatar}>
+                <span className={style.avatar} style={bgAvatar}></span>
+                <div className={style.author}>
+                    <span>韩立</span>
+                    <span className={style.howLong}>1分钟前</span>
+                </div>
+            </div>
+        )
     }
 }
