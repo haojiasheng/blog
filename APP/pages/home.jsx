@@ -20,14 +20,14 @@ class Main extends Component {
                     avatar: true
                 },
                 right: {
-                    content: '热门'
+                    icons: 'newPost_icon.png',
+                    src: '/postEdit'
                 }
             },
             search: {
                 show: true
             }
         });
-        console.log(this.props.path)
     }
     componentWillMount () {
         const {postInit, prompt} = this.props;
@@ -59,7 +59,6 @@ class Topic extends Component{
         )
     }
     navigateTo () {
-        console.log(this)
         this.context.router.history.push('/postDetail');
     }
 }

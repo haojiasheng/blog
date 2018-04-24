@@ -20,15 +20,23 @@ function LeftDOM(props) {
 }
 
 function RightDOM(props) {
-    const {that, right} = props;
-    if (right.icons) {
+    const {right, navigateTo} = props;
+    if (right.icons && right.notSelect_icons) {
         const backgroundImg = {
             background: `url(${require('../public/img/' + right.notSelect_icons)}) no-repeat`,
-            backgroundSize: '0.6rem'
+            backgroundSize: '0.6rem',
+            backgroundPosition: '0 0'
         };
         return <span style={backgroundImg} className={style.collection}></span>;
+    } else if (right.icons && right.src) {
+        const backgroundImg = {
+            background: `url(${require('../public/img/' + right.icons)}) no-repeat`,
+            backgroundSize: '0.6rem',
+            backgroundPosition: '0 0'
+        };
+        return <span onClick={() => {navigateTo(right.src)}} style={backgroundImg} className={style.collection}></span>;
     } else {
-        return <span onClick={that.navigateTo.bind(that, right.src)}>{right.content}</span>
+        return <span onClick={() => {navigateTo(right.src)}}>{right.content}</span>
     }
 }
 
@@ -57,7 +65,7 @@ class Header extends Component{
                 <header>
                     <LeftDOM left={left} user={user} that={this} avatar={avatar}  />
                     <h2>{data.content}</h2>
-                    <RightDOM that={this} right={right} />
+                    <RightDOM that={this} navigateTo={this.navigateTo.bind(this)} right={right} />
                 </header>
             </div>
         )

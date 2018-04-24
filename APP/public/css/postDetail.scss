@@ -18,8 +18,10 @@
     font-size: 0.352rem;
     span{
       float: right;
-      &.collection{
+      &.like{
         float: left;
+        width: 0.5rem;
+        height: 0.7rem;
       }
     }
   }

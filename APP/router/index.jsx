@@ -9,6 +9,7 @@ import SearchPage from '../pages/search';
 import SignUp from '../pages/signup';
 import SignIn from '../pages/signin';
 import postDetail from '../pages/postDetail';
+import postEdit from '../pages/postEdit';
 
 const routes = [
     {
@@ -34,6 +35,11 @@ const routes = [
     {
         path: '/postDetail',
         component: postDetail,
+        exact: false
+    },
+    {
+        path: '/postEdit',
+        component: postEdit,
         exact: false
     }
 ];

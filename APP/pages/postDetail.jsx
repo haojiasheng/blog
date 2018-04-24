@@ -22,15 +22,21 @@ class postDetail extends Component{
         });
     }
     render () {
+        const likeBgImg = {
+            background: `url(${require('../public/img/notLike_icon.png')}) no-repeat`,
+            backgroundSize: '0.7rem'
+        };
         return (
             <div className={style.postDetail}>
                 <div className={style.post}>
                     <PostAvatar />
                     <h3>长得漂亮的人都是这么知道自己长得漂亮的呢？</h3>
                     <p>每个人都对于自己的样貌都有认知过程，比如别人的夸奖，还有路人的频繁回眸。。。</p>
-                    <div className={style.count}>
-                        <span className={style.collection}>9627人收藏</span>
-                        <span>68条评论</span>
+                    <div style={likeBgImg} className={style.count}>
+                        <span  className={style.like}>
+
+                        </span>
+                        <span>9627人收藏</span>
                     </div>
                 </div>
                 <CommentInput />
