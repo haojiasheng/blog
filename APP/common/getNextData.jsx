@@ -1,4 +1,12 @@
 function getNextData(that, initData) {
+    let componentDidMount = null;
+    if (that.componentDidMount) {
+        componentDidMount = that.componentDidMount.bind(that);
+    }
+    let componentWillUnmount = null;
+    if (that.componentWillUnmount) {
+        componentWillUnmount = that.componentWillUnmount.bind(that);
+    }
     that.initState = (props) => {
         const {path, location} = props;
         const {pathname, search} = location;
@@ -7,9 +15,12 @@ function getNextData(that, initData) {
         if (typeof path[that.pathName] === 'object' && path[that.pathName].path === that.pathName) {
             that.path = path[that.pathName];
         } else {
-            /*Object.assign(that.path, path.init, initData, {path: that.pathName});*/
             that.path = getPath(path.init, initData);
             that.path.path = that.pathName;
+        }
+        const callback = that.path.header.right.callback;
+        if (callback) {
+            that.path.header.right.callback = that.rightCallback;
         }
         that.props.pageChange(that.path)
     };
@@ -26,16 +37,20 @@ function getNextData(that, initData) {
     };
     that.initState(that.props);
     that.componentDidMount = () => {
-        that.readDOM()
+        that.readDOM();
+        if (componentDidMount) {
+            componentDidMount()
+        }
     };
     that.componentWillUnmount = () => {
-        that.unMount()
+        that.unMount();
+        componentWillUnmount()
     }
 }
 
 function typeCheck(obj) {
     return {}.toString.call(obj).match(/^.+\s(.+)]$/)[1].toLocaleLowerCase()
-};
+}
 
 function getPath(obj, initObj) {
     let newObj = {};

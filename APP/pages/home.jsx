@@ -1,16 +1,14 @@
 import React,{ Component } from 'react';
 import {connect} from 'react-redux';
-import fetchPosts from '../lib/asyncAction';
-import getNextData from '../common/getNextData';
 import style from '../public/css/home.scss';
 import PropTypes from 'prop-types';
-import {PostAvatar} from '../common/index';
+import {PostAvatar, DataLoad} from '../common/index';
 
 
 class Main extends Component {
     constructor (props) {
         super(props);
-        getNextData(this,{
+        App.getNextData(this,{
             header: {
                 content: '主页',
                 show: true,
@@ -28,38 +26,104 @@ class Main extends Component {
                 show: true
             }
         });
+        this.state = {
+            loadAnimation: true,
+            page: 0,
+            loadMessage: ''
+        };
     }
     componentWillMount () {
-        const {postInit, prompt} = this.props;
-        postInit();
+        this.loadData();
     }
     render () {
+        const {posts} = this.props;
+        const {loadAnimation, loadMessage} = this.state;
         return (
-            <ul className={style.list}>
-                <Topic />
-                <Topic />
-            </ul>
+            <div className={style.home}>
+                <ul className={style.list}>
+                    {posts.map((post) =>
+                        <Topic {...post} key={post._id} />
+                    )}
+                </ul>
+                <DataLoad loadAnimation={loadAnimation} loadMessage={loadMessage}  />
+            </div>
         )
+    }
+    componentDidMount () {
+        this.mounted = true;
+        this.onScrollBottom();
+    }
+    componentWillUnmount () {
+        this.mounted = false;
+    }
+    onScrollBottom () {
+        window.onload = () => {
+            const clientHeight = parseFloat(document.documentElement.clientHeight);
+            window.onscroll = () => {
+                let srcoll = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+                if (clientHeight + srcoll >= this.offset && this.offset > 1000) {
+                    if (!this.state.loadAnimation && !this.state.loadMessage) {
+                        this.setState({
+                            loadAnimation: true
+                        });
+                        this.loadData();
+                    }
+                } else {
+                    this.componentOffset()
+                }
+            }
+        }
+    }
+    loadData () {
+        const data = {
+            page: ++this.state.page
+        };
+        App.api.post('/post/init', data).then((res) => {
+            if (res.code === 0) {
+                setTimeout(() => {
+                        const {postAdd} = this.props;
+                        const data = res.data;
+                        if (data.length === 0) {
+                            this.setState({
+                                loadAnimation: false,
+                                loadMessage: '加载完毕'
+                            });
+                        } else {
+                            if (this.mounted) {
+                                this.setState({
+                                    loadAnimation: false
+                                });
+                            }
+                        }
+                        postAdd(data);
+                        console.log(this.props.posts.length)
+                }, 500);
+                this.componentOffset()
+            }
+        })
+    }
+    componentOffset () {
+        this.offset = parseFloat(window.getComputedStyle(App.DOM).height) - 10;
     }
 }
 
 
 class Topic extends Component{
     render () {
+        const {author, createAt, _id, good, title} = this.props;
         return (
-            <li className={style.topic} onClick={this.navigateTo.bind(this)}>
-                <PostAvatar />
-                <h3>有哪些稳中带皮的操作？离开家附近的法律岁数大了记得是东方斯卡拉但考虑到所说的看电视来看</h3>
-                {/*<p></p>*/}
-                <div>
-                    <span>9644赞同</span>
-                    <span className={style.comment}>699评论</span>
+            <li className={style.topic} onClick={this.navigateTo.bind(this, _id)}>
+                <PostAvatar author={author} createAt={createAt} />
+                <h3>{title}</h3>
+                <div className={style.commentWrap}>
+                    <span>{good}点赞</span>
+                    <span className={style.comment}>{good}评论</span>
                 </div>
             </li>
         )
     }
-    navigateTo () {
-        this.context.router.history.push('/postDetail');
+    navigateTo (id) {
+        this.context.router.history.push(`/postDetail/${id}`);
     }
 }
 Topic.contextTypes = {
@@ -73,19 +137,16 @@ const mapStateToProps = (state) => ({
 });
 function mapDispatchToProps(dispatch, ownProps) {
     return {
-        postInit () {
-            dispatch(fetchPosts('get', '/postInit',{}, 'postInit'))
-        },
-        prompt (msg) {
-            dispatch({
-                type: 'prompt',
-                message: msg
-            })
-        },
         pageChange (path) {
             dispatch({
                 type: 'changePage',
                 path
+            })
+        },
+        postAdd (data) {
+            dispatch({
+                type: 'postAdd',
+                data
             })
         }
     }

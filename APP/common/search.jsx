@@ -5,6 +5,14 @@ import {connect} from 'react-redux';
 
 
 class Search extends Component{
+    constructor (props) {
+        super(props);/*
+        App.api.post('/post/init').then((res) => {
+            if (res.code === 0) {
+                this.props.postInit(res.data)
+            }
+        })*/
+    }
     render () {
         const {pathname} = this.context.router.route.location;
         const {path} = this.props;
@@ -41,5 +49,16 @@ Search.contextTypes = {
 const mapStateToProps = (state) => ({
     path: state.path
 });
+
+/*function mapDispatchToProps(dispatch) {
+    return {
+        postInit (posts) {
+            dispatch({
+                type: 'postInit',
+                posts
+            })
+        }
+    }
+};*/
 
 export default connect(mapStateToProps)(Search)

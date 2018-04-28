@@ -1,13 +1,10 @@
 import React,{Component} from 'react';
-import Search from '../common/search';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import getNextData from '../common/getNextData';
 
 
 class SearchPage extends Component{
     componentWillMount () {
-        getNextData(this,{
+        App.getNextData(this,{
             header: {
                 show: false
             },

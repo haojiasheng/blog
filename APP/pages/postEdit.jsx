@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
-import getNextData from '../common/getNextData';
 import style from '../public/css/postEdit.scss';
 import {connect} from 'react-redux';
 
 class PostEdit extends Component{
     constructor (props) {
         super(props);
-        getNextData(this, {
+        this.rightCallback = () => {
+            this.postCreate.call(this)
+        };
+        App.checkCompetence.checkLogin(this);
+        App.getNextData(this, {
             header: {
                 content: '发布',
                 show: true,
@@ -14,23 +17,58 @@ class PostEdit extends Component{
                     back: true
                 },
                 right: {
-                    content: '发布'
+                    content: '发布',
+                    callback: 1
                 }
             }
-        })
+        });
+        this.state = {
+            title: '',
+            content: ''
+        };
     }
     render () {
         return (
             <div className={style.postEdit}>
-                <input placeholder={'请输入标题'}/>
-                <textarea></textarea>
+                <input onChange={this.titleChange.bind(this)} placeholder={'请输入标题'}/>
+                <textarea onChange={this.contentChange.bind(this)} placeholder="来吧，尽情发挥吧..." className={style.content}></textarea>
             </div>
         );
+    }
+    titleChange (e) {
+        this.setState({
+            title: e.target.value
+        })
+    }
+    contentChange (e) {
+        this.setState({
+            content: e.target.value
+        })
+    }
+    postCreate () {
+        const {history, createPost, user} = this.props;
+        const {content, title} = this.state;
+        const author = this.props.user._id;
+        const data = {
+            title,
+            content,
+            author
+        };
+        App.api.post('/post/create', data).then((res) => {
+            App.prompt(res.msg);
+            if (res.code === 0) {
+                const post = res.data;
+                post.author = user;
+                createPost(post);
+                history.goBack();
+            }
+        })
     }
 }
 
 const mapStateToProps = (state) => ({
-    path: state.path
+    path: state.path,
+    user: state.user
 });
 
 function mapDispatchToProps(dispatch) {
@@ -39,6 +77,12 @@ function mapDispatchToProps(dispatch) {
             dispatch({
                 type: 'changePage',
                 path
+            })
+        },
+        createPost (post) {
+            dispatch({
+                type: 'createPost',
+                post
             })
         }
     }

@@ -2,7 +2,6 @@ import React,{Component} from 'react';
 import style from '../public/css/header.scss';
 import {connect}  from 'react-redux';
 import PropTypes from 'prop-types';
-import api from '../lib/api';
 
 function LeftDOM(props) {
     const {left, user, avatar, that} = props;
@@ -19,31 +18,34 @@ function LeftDOM(props) {
     }
 }
 
-function RightDOM(props) {
+function RightDOM (props) {
     const {right, navigateTo} = props;
-    if (right.icons && right.notSelect_icons) {
+    const {callback, content, src, notSelect_icons, icons} = right;
+    if (icons && notSelect_icons && callback) {
         const backgroundImg = {
-            background: `url(${require('../public/img/' + right.notSelect_icons)}) no-repeat`,
+            background: `url(${require('../public/img/' + notSelect_icons)}) no-repeat`,
             backgroundSize: '0.6rem',
             backgroundPosition: '0 0'
         };
-        return <span style={backgroundImg} className={style.collection}></span>;
-    } else if (right.icons && right.src) {
+        return <span style={backgroundImg} onClick={callback} className={style.icons}></span>;
+    } else if (icons && src) {
         const backgroundImg = {
-            background: `url(${require('../public/img/' + right.icons)}) no-repeat`,
+            background: `url(${require('../public/img/' + icons)}) no-repeat`,
             backgroundSize: '0.6rem',
             backgroundPosition: '0 0'
         };
-        return <span onClick={() => {navigateTo(right.src)}} style={backgroundImg} className={style.collection}></span>;
+        return <span onClick={() => {navigateTo(src)}} style={backgroundImg} className={style.icons}></span>;
+    } else if (callback) {
+        return <span onClick={() => {callback()}} className={style.collection}>{content}</span>;
     } else {
-        return <span onClick={() => {navigateTo(right.src)}}>{right.content}</span>
+        return <span onClick={() => {navigateTo(src)}}>{content}</span>
     }
 }
 
 class Header extends Component{
     componentWillMount () {
         const {userInit} = this.props;
-        api.get('/user/init').then((res) => {
+        App.api.get('/user/init').then((res) => {
             if (res.code === 0) {
                 userInit(res.data);
             }

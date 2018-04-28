@@ -2,18 +2,16 @@ import React,{Component} from 'react';
 import {SignButton, SignInput, SignTextarea, SignImg, SignGender} from '../common/index';
 import style from '../public/css/signup.scss';
 import {connect} from 'react-redux';
-import getNextData from '../common/getNextData';
-import api from '../lib/api';
-import login from '../lib/checkCompetence';
+
 
 class Main extends Component{
     constructor (props) {
         super(props);
-        login.checkNotLogin(this);
+        App.checkCompetence.checkNotLogin(this);
         this.state = {
             imgUrl: ''
         };
-        getNextData(this, {
+        App.getNextData(this, {
             header: {
                 show: false
             },
@@ -47,7 +45,7 @@ class Main extends Component{
     }
     signUp () {
         if (this.state.buttonStyle) {
-            const {signUp, prompt, history} = this.props;
+            const {signUp, history} = this.props;
             const formData = new FormData;
             formData.append('avatar', this.avatar.files[0]);
             formData.append('Email', this.Email.value);
@@ -56,8 +54,8 @@ class Main extends Component{
             formData.append('repassword', this.repassword.value);
             formData.append('bio', this.bio.value);
             formData.append('gender',this.gender.value);
-            api.post('/signUp/create', formData).then((res) => {
-                prompt(res.msg);
+            App.api.post('/signUp/create', formData).then((res) => {
+                App.prompt(res.msg);
                 if (res.code === 0) {
                     signUp(res.data);
                     localStorage.setItem('user', JSON.stringify(res.data))
@@ -98,7 +96,7 @@ function mapStateToProps(state) {
     }
 }
 
-function mapDispatchToProps (dispatch, ownProps) {
+function mapDispatchToProps (dispatch) {
     return {
         pageChange () {
             dispatch({
@@ -110,13 +108,6 @@ function mapDispatchToProps (dispatch, ownProps) {
                 type: 'userInit',
                 user: data
             });
-        },
-        prompt (msg) {
-            dispatch({
-                type: 'prompt',
-                status: 0,
-                message: msg
-            })
         }
     }
 }

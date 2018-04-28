@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, BrowserRouter, Switch} from 'react-router-dom';
+import { Route, BrowserRouter, Switch, Redirect} from 'react-router-dom';
 import Header from '../common/header';
 import Search from '../common/search';
 import Prompt from '../common/prompt';
@@ -33,7 +33,7 @@ const routes = [
         exact: false
     },
     {
-        path: '/postDetail',
+        path: '/postDetail/:id',
         component: postDetail,
         exact: false
     },
@@ -47,15 +47,16 @@ const routes = [
 
 const router = (
     <BrowserRouter>
-        <div className={'wrap'}>
-            {true && <Header />}
-            {true && <Search />}
-            {true && <Side/>}
-            {<Prompt />}
+        <div className={'wrap'} ref={wrap => (App.DOM = wrap)}>
+            <Header />
+            <Search />
+            <Side/>
+            <Prompt />
             <Switch>
                 {routes.map((route, index) => (
                     <Route key={index} path={route.path} component={route.component} exact={route.exact} />
                 ))}
+                <Redirect from={''} to={'/'}/>
             </Switch>
         </div>
     </BrowserRouter>

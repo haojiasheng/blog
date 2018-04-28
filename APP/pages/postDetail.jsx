@@ -1,104 +1,134 @@
 import React, {Component} from 'react';
 import style from '../public/css/postDetail.scss';
-import getNextData from '../common/getNextData';
 import {connect} from 'react-redux';
-import {PostAvatar} from '../common/index';
+import {PostAvatar, CommentInput} from '../common/index';
+import {Comment, DataLoad} from '../common/index';
+
+
 
 class postDetail extends Component{
     constructor (props) {
         super(props);
-        getNextData(this, {
+        this.rightCallback = () => {
+            const {notSelect_icons, icons} = this.path.header.right;
+            this.path.header.right.notSelect_icons = icons;
+            this.path.header.right.icons = notSelect_icons;
+            this.props.pageChange(this.path)
+        };
+        App.getNextData(this, {
             header: {
                 show: true,
-                content: '有哪些稳中带皮的操作',
+                content: '',
                 left: {
                     back: true
                 },
                 right: {
                     notSelect_icons: 'notCollection_icon.png',
-                    icons: 'collection_icon.png'
+                    icons: 'collection_icon.png',
+                    callback: 1
                 }
-            }
+            },
+            data: null
         });
+        this.state ={
+            post: {},
+            likeBgImg: 'notLike_icon.png',
+            comments: null,
+            loadState: 0
+        };
+        this.loadData()
     }
     render () {
+        const {comments, post} = this.state;
+        const {author, createAt, title, content, collect} = post;
         const likeBgImg = {
-            background: `url(${require('../public/img/notLike_icon.png')}) no-repeat`,
+            background: `url(${require('../public/img/' + this.state.likeBgImg)}) no-repeat`,
             backgroundSize: '0.7rem'
         };
         return (
-            <div className={style.postDetail}>
+            !!author && (<div className={style.postDetail}>
                 <div className={style.post}>
-                    <PostAvatar />
-                    <h3>长得漂亮的人都是这么知道自己长得漂亮的呢？</h3>
-                    <p>每个人都对于自己的样貌都有认知过程，比如别人的夸奖，还有路人的频繁回眸。。。</p>
-                    <div style={likeBgImg} className={style.count}>
-                        <span  className={style.like}>
-
+                    <PostAvatar author={author} createAt={createAt} />
+                    <h3>{title}</h3>
+                    <p>{content}</p>
+                    <div className={style.count}>
+                        <span style={likeBgImg} onClick={this.addLike.bind(this)} className={style.like}>
                         </span>
-                        <span>9627人收藏</span>
+                        <span>{collect}人收藏</span>
                     </div>
                 </div>
-                <CommentInput />
-            </div>
+                {comments.map((comment) =>
+                    <Comment key={comment._id} author={comment.author} createAt={comment.createAt} content={comment.content} />
+                )}
+                <CommentInput postComment={this.postComment.bind(this)} />
+                <DataLoad />
+            </div>)
         )
     }
-}
-
-class CommentInput extends Component{
-    constructor (props) {
-        super(props);
-        this.state = {
-            commentPlaceholder: '说说你的看法...',
-            commentValue: '',
-            commentStyle: {}
-        }
+    componentWillUnmount () {
+        console.log(1)
     }
-    render () {
-        const {commentPlaceholder, commentStyle} = this.state
-        return (
-            <div onClick={this.commentWrapClick.bind(this)} style={commentStyle} className={style.commentInput}>
-                <div ref={(input) => {this.commentInputBox = input}} onInput={this.commentInput.bind(this)}  onBlur={this.commentInputBlur.bind(this)} onFocus={this.commentInputFocus.bind(this)} data-placeholder={commentPlaceholder} className={style.input} contentEditable={true}></div>
-                发布
-            </div>
-        )
-    }
-    commentInputBlur (e) {
-        console.log(e.target)
-        const value = e.target.textContent;
-        e.target.textContent = '';
-        if (value) {
+    addLike () {
+        const {likeBgImg} = this.state;
+        if (likeBgImg === 'notLike_icon.png') {
             this.setState({
-                commentPlaceholder: '[草稿待发送]',
-                commentValue: value
-            })
-        }
-    }
-    commentInputFocus (e) {
-        const value = this.state.commentValue;
-        e.target.textContent = value;
-    }
-    commentInput (e) {
-        const value = e.target.textContent;
-        if (!value) {
-            this.setState({
-                commentPlaceholder: '说说你的看法...'
+                likeBgImg: 'like_icon.png'
             })
         } else {
             this.setState({
-                commentStyle: {
-                    color: 'blue'
-                }
+                likeBgImg: 'notLike_icon.png'
             })
         }
     }
-    commentWrapClick () {
-        this.commentInputBox.focus()
+    loadData () {
+        if (this.path.data) {
+            this.state = {
+                post: this.path.data,
+                comments: this.path.data.comments,
+                likeBgImg: 'notLike_icon.png'
+            };
+            return;
+        }
+        const {match, history, pageChange} = this.props;
+        App.api.get(`/post/detail/${match.params.id}`).then((res) => {
+            if (res.code === -1) {
+                App.prompt(res.message);
+                history.goBack();
+            } else {
+                this.path.header.content = res.data.title;
+                this.path.data = res.data;
+                this.setState({
+                    post: res.data,
+                    comments: res.data.comments,
+                    loadState: 1
+                });
+                pageChange(this.path);
+            }
+        })
+    }
+    postComment (value) {
+        const {user, history} = this.props;
+        const {post} = this.state;
+        if (!user._id) {
+            App.prompt('请先登陆');
+            history.push('/signIn');
+            return;
+        }
+        const params = {
+            content: value,
+            postId: post._id,
+            author: user._id
+        };
+        App.api.post('/comment', params).then((res) => {
+            console.log(res)
+        })
     }
 }
 
+
 const mapStateToProps = (state) => ({
-    path: state.path
+    path: state.path,
+    user: state.user
 });
 
 function mapDispatchToProps(dispatch) {

@@ -16,7 +16,7 @@ let plugins = [
         verbose: true,
         dry: false
     })
-]
+];
 if (process.argv.includes('development')) {
     plugins.pop()
 }
@@ -30,14 +30,16 @@ module.exports = {
     output: {
         path: __dirname + '/'+filename,
         filename: 'build.js',
-        chunkFilename: '[name].[chunkhash:5].chunk.js'
+        chunkFilename: '[name].[chunkhash:5].chunk.js',
+        publicPath: '/'
     },
     devServer: {
         contentBase: './APP/static',
         port: 3001,
         inline: true,
         historyApiFallback: true/*,
-        openPage: 'index.ejs'*/
+        openPage: 'index.ejs'*/,
+        publicPath: '/'
     },
     module: {
         rules: [
@@ -70,7 +72,8 @@ module.exports = {
                     loader: 'url-loader',
                     options: {
                         name: 'img/[name][hash:5].[ext]',
-                        limit: 10000
+                        limit: 10000,
+                        publicPath: '/'
                     }
                 }
             },

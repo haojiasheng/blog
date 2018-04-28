@@ -4,8 +4,18 @@
     width: 100%;
     height: 1rem;
     font-size: 0.46rem;
+    padding: 0.5rem;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
   }
-  textarea{
+  .content{
     width: 100%;
+    font-size: 0.46rem;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    height: 80vh;
   }
 }

@@ -37,6 +37,7 @@ router.post('/signIn', function (req, res, next) {
         data.msg = e.message;
         data.code = -1;
         res.json(data);
+        return;
     }
     User.getUserInfo(Email).then(function (user) {
         if (!user) {

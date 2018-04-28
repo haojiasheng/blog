@@ -38,6 +38,12 @@ header {
     float: right;
     margin-top: 0.46rem;
     &.collection {
+      width: 2rem;
+      height: 0.7rem;
+      overflow: hidden;
+      text-align: right;
+    }
+    &.icons{
       width: 0.7rem;
       height: 0.7rem;
       overflow: hidden;

@@ -35,19 +35,19 @@ router.post('/create', function (req, res, next) {
     const bio = req.fields.bio;
     let password = req.fields.password;
     const repassword = req.fields.repassword;
-    let avatar = req.files.avatar;
     const gender = req.files.gender;
+    let avatar = req.files.avatar;
     if (avatar) {
-        avatar = req.files.avatar.path.split(path.sep).pop()
+        avatar = req.files.avatar.path.split(path.sep).pop();
     } else {
-        avatar = ''
+        avatar = gender === 'm' ? 'm.jpg' : 'w.jpg';
     }
     let data = req.sendData;
     try {
         if (!Email.length) {
             throw new Error('请输入邮箱');
         }
-        if (!(/.+@.+\..{2,}$/).test(Email)) {
+        if (!(/^\w+@[0-9a-z]+(\.[a-z]+){1,3}$/).test(Email)) {
             throw new Error('邮箱输入格式不正确');
         }
         if (!nikeName.length) {
@@ -66,7 +66,7 @@ router.post('/create', function (req, res, next) {
         data.msg = e.message;
         data.code = -1;
         res.json(data);
-        return
+        return;
     }
     password = sha1(password);
     let user = {

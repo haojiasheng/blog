@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import style from '../public/css/commonIndex.scss';
+import moment from 'moment';
 
 export class SignButton extends Component{
     render () {
@@ -49,7 +50,7 @@ export class SignImg extends Component{
 
 export class SignCheck extends Component{
     render () {
-        const {value, inputKey, name, defaultValue, checkChange, content, backgroundImg} = this.props
+        const {value, inputKey, name, defaultValue, checkChange, content, backgroundImg} = this.props;
         return (
             <label className={style.signCheck}>{inputKey}
                 <span className={style.checkWrap}  style={backgroundImg}>
@@ -90,19 +91,115 @@ export class SignGender extends Component{
     }
 }
 
+/*注册所需要的输入框、按钮等等*/
+
+
 export class PostAvatar extends Component{
     render () {
-        const bgAvatar = {
-            background: `url(${require('../public/img/avatar/avatar.jpg')})`,
-            backgroundSize: '1rem'
-        };
+        const {author, createAt} = this.props;
+        let bgAvatar = {};
+        if (author) {
+            bgAvatar = {
+                background: `url(${require('../public/img/avatar/'+ author.avatar)}) no-repeat`,
+                backgroundSize: '1rem'
+            };
+        }
         return (
-            <div className={style.postAvatar}>
+            !!author && <div className={style.postAvatar}>
                 <span className={style.avatar} style={bgAvatar}></span>
                 <div className={style.author}>
-                    <span>韩立</span>
-                    <span className={style.howLong}>1分钟前</span>
+                    <span>{author.nikeName}</span>
+                    <span className={style.howLong}>{moment(createAt).locale('zh-cn').startOf().fromNow()}</span>
                 </div>
+            </div>
+        )
+    }
+}
+/*文章头像*/
+
+export class CommentInput extends Component{
+    constructor (props) {
+        super(props);
+        this.state = {
+            commentPlaceholder: '说说你的看法...',
+            commentValue: '',
+            commentStyle: {}
+        }
+    }
+    render () {
+        const {commentPlaceholder, commentStyle} = this.state;
+        return (
+            <div style={commentStyle} className={style.commentInput}>
+                <div onInput={this.commentInput.bind(this)}  onBlur={this.commentInputBlur.bind(this)} onFocus={this.commentInputFocus.bind(this)} data-placeholder={commentPlaceholder} className={style.input} contentEditable={true}></div>
+                <span onClick={() => {this.props.postComment(this.state.commentValue)}}>发布</span>
+            </div>
+        )
+    }
+    commentInputBlur (e) {
+        const value = e.target.textContent;
+        e.target.textContent = '';
+        if (value) {
+            this.setState({
+                commentPlaceholder: '[草稿待发送]'
+            })
+        }
+    }
+    commentInputFocus (e) {
+        const value = this.state.commentValue;
+        e.target.textContent = value;
+    }
+    commentInput (e) {
+        const value = e.target.textContent;
+        if (!value) {
+            this.setState({
+                commentPlaceholder: '说说你的看法...',
+                commentStyle: {
+                    color: '#aaa'
+                },
+                commentValue: value
+            })
+        } else {
+            this.setState({
+                commentStyle: {
+                    color: 'blue'
+                },
+                commentValue: value
+            })
+        }
+    }
+}
+/*评论输入框*/
+
+export class Comment extends Component{
+    render () {
+        const {author, createAt, content} = this.props;
+        const likeStyle = 'notLike_icon.png';
+        const likeBg = {
+            background: `url(${require('../public/img/' + likeStyle)})`,
+            backgroundSize:  '0.5rem'
+        };
+        return (
+            <div className={style.comment}>
+                <div className={style.commentHeader}>
+                    <PostAvatar  author={author} createAt={createAt}  />
+                    <span style={likeBg} className={style.commentLike}></span>
+                </div>
+                <div className={style.commentContent}>
+                    {content}
+                </div>
+            </div>
+        )
+    }
+}
+/*每条评论*/
+
+
+export class DataLoad extends Comment {
+    render () {
+        let {loadAnimation, loadMessage} = this.props;
+        return (
+            <div className={`${style.loading} ${style['loading_' + loadAnimation]}`}>
+                <div className={style.msg}>{loadMessage}</div>
             </div>
         )
     }

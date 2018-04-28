@@ -27,15 +27,22 @@
     -webkit-line-clamp: 3;
     overflow: hidden;
   }*/
-  span{
-    font-size: 0.35rem;
-    color: #b5b5b5;
-    &.comment{
-      float: right;
+  .commentWrap{
+    overflow: hidden;
+    span{
+      color: #b5b5b5;
+      font-size: 0.35rem;
+      float: left;
+      &.comment{
+        float: right;
+      }
     }
   }
 }
 .list {
   width: 100%;
   background: #ebebeb;
+}
+.home{
+  position: relative;
 }

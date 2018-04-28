@@ -10,7 +10,7 @@ class Prompt extends Component{
     componentWillReceiveProps () {
         const {removePrompt} = this.props;
         if (this.timer) {
-            clearTimeout(this.timer)
+            clearTimeout(this.timer);
             this.timer = setTimeout(() => {
                 removePrompt()
             }, 3000);

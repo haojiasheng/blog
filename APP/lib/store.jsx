@@ -3,10 +3,10 @@ import thunk from 'redux-thunk'
 
 function posts(posts = [], action) {
     switch (action.type) {
+        case 'createPost':
+            return [action.post , ...posts];
         case 'postAdd':
-            return posts;
-        case 'postInit':
-            return posts;
+            return [...posts, ...action.data];
         default:
             return posts
     }
@@ -15,7 +15,7 @@ function posts(posts = [], action) {
 function user(user = null, action) {
     switch (action.type) {
         case 'userInit':
-            return action.user;
+            return action.user || null;
         default:
             return user
     }
@@ -37,27 +37,29 @@ function prompt(prompt = {status: 1}, action) {
 function path(path = {
     init: {
         side: {
-            show: false
+            show: false /*是否显示导航栏*/
         },
         header: {
-            show: false,
-            content: '',
-            left: {
-                back: false,
-                content: '',
-                src: ''
+            show: false, /*是否显示页面头部*/
+            content: '', /*头部标题*/
+            left: { /*头部左边*/
+                back: false, /*返回*/
+                content: '', /*文字*/
+                src: '' /*点击导航路径*/
             },
-            right: {
-                content: '',
-                src: '',
-                notSelect_icons: '',
-                icons: ''
+            right: { /*头部左边*/
+                content: '', /*文字*/
+                src: '', /*点击导航路径*/
+                notSelect_icons: '', /*icon未选中图片*/
+                icons: '', /*icon选中图片*/
+                callback: '' /*点击回调函数*/
             }
         },
         search: {
-            show: false,
-            state: 0
-        }
+            show: false, /*是否显示搜索框*/
+            state: 0 /*如果值为1将到搜索页面*/
+        },
+        data: null /*页面数据*/
     }
 }, action) {
     switch (action.type) {
@@ -65,7 +67,7 @@ function path(path = {
             path[action.path.path] = action.path;
             return Object.assign({}, path);
         default:
-            return path
+            return path;
     }
 }
 

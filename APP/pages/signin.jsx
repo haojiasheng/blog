@@ -1,16 +1,13 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import getNextData from '../common/getNextData';
 import style from '../public/css/signin.scss';
 import {SignInput, SignButton} from '../common/index';
-import api from '../lib/api';
-import login from '../lib/checkCompetence';
 
 class SignIn extends Component{
     constructor (props) {
         super(props);
-        login.checkNotLogin(this);
-        getNextData(this, {
+        App.checkCompetence.checkNotLogin(this);
+        App.getNextData(this, {
             header: {
                 show: true,
                 content: '首页',
@@ -66,19 +63,19 @@ class SignIn extends Component{
         }
     }
     signIn () {
-        const {prompt, userInit, history} = this.props;
+        const {userInit, history} = this.props;
         if (this.state.buttonStyle) {
             const params = {
                 Email: this.Email.value,
                 password: this.password.value
             };
-            api.post('/user/signIn', params).then((res) => {
+            App.api.post('/user/signIn', params).then((res) => {
                 if (res.code === 0) {
                     userInit(res.data);
                     localStorage.setItem('user', JSON.stringify(res.data));
                     history.goBack()
                 }
-                prompt(res.msg)
+                App.prompt(res.msg)
             })
         }
     }
@@ -103,12 +100,6 @@ function mapDispatchToProps(dispatch) {
             dispatch({
                 type: 'userInit',
                 user
-            })
-        },
-        prompt (msg) {
-            dispatch({
-                type: 'prompt',
-                message: msg
             })
         }
     }

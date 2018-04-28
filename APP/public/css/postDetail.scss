@@ -1,5 +1,9 @@
 .post {
   padding:0.296rem 0.611rem 0 0.435rem;
+  border-bottom: 0.2rem solid #eee;
+  width: 10rem;
+  box-sizing: border-box;
+  overflow: hidden;
   h3{
     font-size: 0.52rem;
     margin-top: 0.296rem;
@@ -10,49 +14,27 @@
     margin-top: 0.5rem;
     line-height: 0.583rem;
   }
-  border-bottom: 0.01rem solid #aaa;
   .count {
     overflow: hidden;
-    margin: 0.513rem 0 0.666rem 0;
+    margin-top: 1rem;
+    width: 10rem;
+    position: relative;
+    left: -0.42rem;
+    padding: 0.513rem 0.611rem;
+    box-sizing: border-box;
     color: #646464;
     font-size: 0.352rem;
+    border-top: 0.01rem solid #aaa;
     span{
       float: right;
       &.like{
         float: left;
-        width: 0.5rem;
+        width: 0.7rem;
         height: 0.7rem;
       }
     }
   }
 }
 .postDetail{
-}
-.commentInput{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 1.25rem;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 10rem;
-  border-top: 0.01rem solid #aaaaaa;
-  box-sizing: border-box;
-  padding: 0.3rem 0;
-  font-size: 0.45rem;
-  color: #bbb;
-  .input{
-    width: 8rem;
-    font-size: 0.5rem;
-    padding-left: 0.6rem;
-    overflow: hidden;
-    outline: none;
-    border: none;
-    color: #000;
-    &:empty::after{
-      content: attr(data-placeholder);
-      color:#bbb;
-    }
-  }
+  padding-bottom: 1.28rem;
 }
