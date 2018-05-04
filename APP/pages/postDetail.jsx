@@ -1,19 +1,43 @@
 import React, {Component} from 'react';
 import style from '../public/css/postDetail.scss';
 import {connect} from 'react-redux';
-import {PostAvatar, CommentInput} from '../common/index';
-import {Comment, DataLoad} from '../common/index';
+import {Comment, DataLoad, CommentInput, PostAvatar} from '../common/index';
+import {getSearch} from '../lib/locationControl';
 
 
 
 class postDetail extends Component{
     constructor (props) {
         super(props);
-        this.rightCallback = () => {
-            const {notSelect_icons, icons} = this.path.header.right;
-            this.path.header.right.notSelect_icons = icons;
-            this.path.header.right.icons = notSelect_icons;
-            this.props.pageChange(this.path)
+        this.rightCallback = () => {  /*header右边回调函数*/
+            App.checkCompetence.checkLogin(this);
+            const {post} = this.path.data;
+            const state = this.path.header.right.state;
+            let {user} = this.props;
+            user = user || {};
+            const data = {
+                userId: user._id,
+                postId: post._id
+            };
+            if (state) {
+                App.api.post('/collect/cancel', data).then((res) => {
+                    if (res.code === 0) {
+                        this.path.header.right.state = false;
+                        --this.path.data.post.collectCount;
+                        this.props.pageChange(this.path);
+                        App.prompt(res.msg);
+                    }
+                });
+            } else {
+                App.api.post('/collect', data).then((res) => {
+                    if (res.code === 0) {
+                        this.path.header.right.state = true;
+                        ++this.path.data.post.collectCount;
+                        this.props.pageChange(this.path);
+                        App.prompt(res.msg)
+                    }
+                });
+            }
         };
         App.getNextData(this, {
             header: {
@@ -25,118 +49,193 @@ class postDetail extends Component{
                 right: {
                     notSelect_icons: 'notCollection_icon.png',
                     icons: 'collection_icon.png',
-                    callback: 1
+                    callback: null,
+                    state: false,
+                    callbackState: 1
                 }
             },
-            data: null
+            data: {
+                post: null,
+                like: false,
+                comments: [],
+                loadAnimation: true,
+                loadMessage: ''
+            }
         });
-        this.state ={
-            post: {},
-            likeBgImg: 'notLike_icon.png',
-            comments: null,
-            loadState: 0
-        };
-        this.loadData()
+        this.loadData();
+        this.posts = this.props.posts;
     }
     render () {
-        const {comments, post} = this.state;
-        const {author, createAt, title, content, collect} = post;
+        let {post, loadAnimation, loadMessage, like} = this.path.data;
+        post = post || {};
+        let comments = post.comments;
+        console.log(comments)
+        const {author, createAt, title, content, collectCount} = post;
+        let likeImg = like ? 'like_icon.png' : 'notLike_icon.png';
         const likeBgImg = {
-            background: `url(${require('../public/img/' + this.state.likeBgImg)}) no-repeat`,
+            background: `url(${require('../public/img/' + likeImg)}) no-repeat`,
             backgroundSize: '0.7rem'
         };
         return (
-            !!author && (<div className={style.postDetail}>
-                <div className={style.post}>
-                    <PostAvatar author={author} createAt={createAt} />
-                    <h3>{title}</h3>
-                    <p>{content}</p>
-                    <div className={style.count}>
+            <div>
+                {
+                    !!author && <div className={style.postDetail}>
+                        <div className={style.post}>
+                            <PostAvatar author={author} createAt={createAt} />
+                            <h3>{title}</h3>
+                            <p>{content}</p>
+                            <div className={style.count}>
                         <span style={likeBgImg} onClick={this.addLike.bind(this)} className={style.like}>
                         </span>
-                        <span>{collect}人收藏</span>
+                                <span>{collectCount}人收藏</span>
+                            </div>
+                        </div>
+                        {comments.map((comment, index) => {
+                                let commentLikeImg = comment.commentLike ? 'like_icon.png' : 'notLike_icon.png';
+                                return <Comment addCommentLike={this.addCommentLike.bind(this, index)} commentLikeCount={comment.commentLikeCount} commentLikeImg={commentLikeImg} key={comment._id} author={comment.author} createAt={comment.createAt} content={comment.content} />
+                            }
+                        )}
+                        <CommentInput postComment={this.postComment.bind(this)} />
                     </div>
-                </div>
-                {comments.map((comment) =>
-                    <Comment key={comment._id} author={comment.author} createAt={comment.createAt} content={comment.content} />
-                )}
-                <CommentInput postComment={this.postComment.bind(this)} />
-                <DataLoad />
-            </div>)
+                }
+                {(loadAnimation || loadMessage) && <DataLoad loadAnimation={loadAnimation} loadMessage={loadMessage} />}
+            </div>
         )
     }
     componentWillUnmount () {
-        console.log(1)
+        this.props.postsChange(this.posts);
+    }
+    addCommentLike (index) {
+        const {comments} = this.path.data.post;
+        const {user} = this.props;
+        const commentLike = comments[index].commentLike;
+        const params = {
+            userId: user._id,
+            commentId: comments[index]._id
+        }
+        if (commentLike) {
+            this.path.data.post.comments[index].commentLike = false
+        } else {
+            App.api.post('/comment/like', params).then(
+                (res) => {
+                    if (res.code === 0) {
+                        this.path.data.post.comments[index].commentLike = true;
+                        ++this.path.data.post.comments[index].commentLikeCount;
+                        this.props.pageChange(this.path);
+                    }
+                }
+            );
+        }
     }
     addLike () {
-        const {likeBgImg} = this.state;
-        if (likeBgImg === 'notLike_icon.png') {
-            this.setState({
-                likeBgImg: 'like_icon.png'
-            })
+        const {like, post} = this.path.data;
+        let {user} = this.props;
+        user = user || {};
+        App.checkCompetence.checkLogin(this);
+        const data = {
+            userId: user._id,
+            postId: post._id
+        };
+        if (like === false) {
+            App.api.post('/like', data).then((res) => {
+                if (res.code === 0) {
+                    this.path.data.like = true;
+                    this.props.pageChange(this.path);
+                    App.prompt(res.msg);
+                    this.postsChange('likeCount', true);
+                }
+            });
         } else {
-            this.setState({
-                likeBgImg: 'notLike_icon.png'
-            })
+            App.api.post('/like/cancel', data).then((res) => {
+                if (res.code === 0) {
+                    this.path.data.like = false;
+                    this.props.pageChange(this.path);
+                    App.prompt(res.msg);
+                    this.postsChange('likeCount', false)
+                }
+            });
         }
     }
     loadData () {
-        if (this.path.data) {
-            this.state = {
-                post: this.path.data,
-                comments: this.path.data.comments,
-                likeBgImg: 'notLike_icon.png'
-            };
+        if (this.path.data.post) {
             return;
         }
-        const {match, history, pageChange} = this.props;
-        App.api.get(`/post/detail/${match.params.id}`).then((res) => {
+        let {match, history, user} = this.props;
+        user = user || {};
+        const data = {
+            id: match.params.id,
+            userId: user._id
+        };
+        App.api.post('/post/detail', data).then((res) => {
             if (res.code === -1) {
                 App.prompt(res.message);
                 history.goBack();
             } else {
-                this.path.header.content = res.data.title;
-                this.path.data = res.data;
-                this.setState({
-                    post: res.data,
-                    comments: res.data.comments,
-                    loadState: 1
-                });
-                pageChange(this.path);
+                const result = res.data;
+                const like = result.like;
+                this.path.header.content = result.title;
+                this.path.data.post = result;
+                this.path.data.like = like;
+                this.path.data.loadAnimation = false;
+                this.path.header.right.state = result.collect;
+                this.props.pageChange(this.path)
             }
         })
     }
     postComment (value) {
-        const {user, history} = this.props;
-        const {post} = this.state;
-        if (!user._id) {
-            App.prompt('请先登陆');
-            history.push('/signIn');
-            return;
-        }
+        App.checkCompetence.checkLogin(this);
+        const {user} = this.props;
+        const {post} = this.path.data;
+        const comments = post.comments;
         const params = {
             content: value,
             postId: post._id,
             author: user._id
         };
         App.api.post('/comment', params).then((res) => {
-            console.log(res)
+            if (res.code === 0) {
+                let comment = res.data;
+                comment.commentLikeCount = 0;
+                this.path.data.post.comments = [...comments, comment];
+                this.props.pageChange(this.path);
+                const offsetHeight = parseFloat(window.getComputedStyle(App.DOM).height);
+                const clientHeight = parseFloat(document.documentElement.clientHeight);
+                window.scroll(0, offsetHeight - clientHeight);
+                this.postsChange('commentCount', true);
+            }
         })
+    }
+    postsChange (key, state) {
+        const searchIndex = getSearch('index');
+        if (this.posts.length-1 >= searchIndex) {
+            if (state) {
+                ++this.posts[searchIndex][key];
+            } else {
+                --this.posts[searchIndex][key];
+            }
+        }
     }
 }
 
 
 const mapStateToProps = (state) => ({
     path: state.path,
-    user: state.user
+    user: state.user,
+    posts: state.posts
 });
 
 function mapDispatchToProps(dispatch) {
     return {
         pageChange (path) {
             dispatch({
-                type: 'changePage',
+                type: 'pageChange',
                 path
+            })
+        },
+        postsChange (posts) {
+            dispatch({
+                type: 'postsChange',
+                posts
             })
         }
     }

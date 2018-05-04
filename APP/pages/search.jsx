@@ -31,7 +31,7 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = {
     pageChange (path) {
         return {
-            type: 'changePage',
+            type: 'pageChange',
             path
         }
     }

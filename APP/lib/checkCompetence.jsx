@@ -1,9 +1,14 @@
 export default {
-    checkLogin (that) {
+    checkLogin (that, state) {
         const {user, history} = that.props;
         if (!user) {
             App.prompt('请先登录');
-            history.push('/signIn');
+            if (state) {
+                history.replace('/signIn');
+            } else {
+                history.push('/signIn');
+            }
+            return false;
         }
     },
     checkNotLogin (that) {
@@ -11,6 +16,7 @@ export default {
         if (user) {
             App.prompt('已登录');
             history.goBack('back');
+            return false;
         }
     }
 }

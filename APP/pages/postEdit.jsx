@@ -6,9 +6,25 @@ class PostEdit extends Component{
     constructor (props) {
         super(props);
         this.rightCallback = () => {
-            this.postCreate.call(this)
+            const {history, createPost, user} = this.props;
+            const {content, title} = this.state;
+            const author = this.props.user._id;
+            const data = {
+                title,
+                content,
+                author
+            };
+            App.api.post('/post/create', data).then((res) => {
+                App.prompt(res.msg);
+                if (res.code === 0) {
+                    const post = res.data;
+                    post.author = user;
+                    createPost(post);
+                    history.goBack();
+                }
+            })
         };
-        App.checkCompetence.checkLogin(this);
+        App.checkCompetence.checkLogin(this, true);
         App.getNextData(this, {
             header: {
                 content: '发布',
@@ -18,7 +34,8 @@ class PostEdit extends Component{
                 },
                 right: {
                     content: '发布',
-                    callback: 1
+                    callbackState: 1,
+                    callback: null
                 }
             }
         });
@@ -46,23 +63,7 @@ class PostEdit extends Component{
         })
     }
     postCreate () {
-        const {history, createPost, user} = this.props;
-        const {content, title} = this.state;
-        const author = this.props.user._id;
-        const data = {
-            title,
-            content,
-            author
-        };
-        App.api.post('/post/create', data).then((res) => {
-            App.prompt(res.msg);
-            if (res.code === 0) {
-                const post = res.data;
-                post.author = user;
-                createPost(post);
-                history.goBack();
-            }
-        })
+
     }
 }
 
@@ -75,7 +76,7 @@ function mapDispatchToProps(dispatch) {
     return {
         pageChange (path) {
             dispatch({
-                type: 'changePage',
+                type: 'pageChange',
                 path
             })
         },

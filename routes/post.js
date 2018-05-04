@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../mongoDB/post');
 const Comment = require('../mongoDB/comment');
+const Like = require('../mongoDB/like');
+const Collect = require('../mongoDB/collect');
 
 router.get('/', function (req, res, next) {
     res.render('index')
@@ -15,7 +17,7 @@ router.post('/init', function (req, res, next) {
     Post.getPosts(author, count).then(function (result) {
         data.data = result;
         data.page = page;
-        res.json(data);
+        return res.json(data);
     })
         .catch(next)
 });
@@ -45,16 +47,27 @@ router.post('/create', function (req, res, next) {
         .catch(next)
 });
 
-router.get('/detail/:id', function (req, res, next) {
+router.post('/detail', function (req, res, next) {
     let data = req.sendData;
-    const id = req.params.id;
-    Promise.all([Post.getPostByid(id), Comment.getCommentByPostId(id)]).then(function (result) {
-        if (!result[0]) {
+    const id = req.body.id;
+    const userId = req.body.userId.toString().trim() || 1;
+    const params = {
+        postId: id,
+        userId: userId
+    };
+    Promise.all([Post.getPostByid(id), Comment.getCommentByPostId(id, userId), Like.checkUserLike(params), Collect.getCollectCount(id), Collect.checkUserCollect(params)]).then(function (result) {
+        let post = result[0];
+        if (!post) {
             res.msg = '该文章不存在';
             res.code = -1;
         }
-        result[0].comments = result[1];
-        data.data = result[0];
+        post.like = false;
+        post.comments = result[1];
+        post.like = !!result[2].length;
+        post.collectCount = result[3];
+        console.log()
+        post.collect = !!result[4].length;
+        data.data = post;
         return res.json(data);
     })
         .catch(next)

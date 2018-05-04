@@ -7,6 +7,8 @@ function posts(posts = [], action) {
             return [action.post , ...posts];
         case 'postAdd':
             return [...posts, ...action.data];
+        case 'postChange':
+            return action.posts;
         default:
             return posts
     }
@@ -52,7 +54,9 @@ function path(path = {
                 src: '', /*点击导航路径*/
                 notSelect_icons: '', /*icon未选中图片*/
                 icons: '', /*icon选中图片*/
-                callback: '' /*点击回调函数*/
+                callback: null, /*点击回调函数*/
+                callbackState: 0, /*控制回调函数*/
+                state: false /*控制图片显示*/
             }
         },
         search: {
@@ -63,7 +67,7 @@ function path(path = {
     }
 }, action) {
     switch (action.type) {
-        case 'changePage':
+        case 'pageChange':
             path[action.path.path] = action.path;
             return Object.assign({}, path);
         default:

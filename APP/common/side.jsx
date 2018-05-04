@@ -118,7 +118,7 @@ function mapDispatchToProps (dispatch) {
     return {
         changePage (data) {
             dispatch({
-                type: 'changePage',
+                type: 'pageChange',
                 path: data
             })
         }

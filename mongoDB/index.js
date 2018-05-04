@@ -61,10 +61,6 @@ const Post = mongolass.model('Post', {
         type: 'string',
         require: true
     },
-    good: {
-        type: 'number',
-        default: 0
-    },
     collect: {
         type: 'number',
         default: 0
@@ -89,10 +85,48 @@ const Comment = mongolass.model('Comment', {
 });
 Comment.index({postId: 1}, {_id: -1});
 
+const Like = mongolass.model('Like', {
+    postId: {
+        type: Mongolass.Types.ObjectId,
+        require: true
+    },
+    userId: {
+        type: Mongolass.Types.ObjectId,
+        require: true
+    }
+});
+Like.index({userId: 1}).exec();
 
+const Collect = mongolass.model('Collect', {
+    postId: {
+        type: Mongolass.Types.ObjectId,
+        require: true
+    },
+    userId: {
+        type: Mongolass.Types.ObjectId,
+        require: true
+    }
+});
+Collect.index({postId: 1}).exec();
+
+
+const CommentLike = mongolass.model('CommentLike', {
+    commentId: {
+        type: Mongolass.Types.ObjectId,
+        require: true
+    },
+    userId: {
+        type: Mongolass.Types.ObjectId,
+        require: true
+    }
+});
+CommentLike.index({postId: 1}, {userId: -1}).exec();
 
 module.exports = {
     User,
     Post,
-    Comment
+    Comment,
+    Like,
+    Collect,
+    CommentLike
 };

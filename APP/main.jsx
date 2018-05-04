@@ -21,8 +21,6 @@ global.App = {
     }
 };
 
-
-
 ReactDOM.render(
     <Provider store={store}>
         {router}

@@ -35,12 +35,13 @@ router.post('/create', function (req, res, next) {
     const bio = req.fields.bio;
     let password = req.fields.password;
     const repassword = req.fields.repassword;
-    const gender = req.files.gender;
+    const gender = req.fields.gender;
     let avatar = req.files.avatar;
     if (avatar) {
         avatar = req.files.avatar.path.split(path.sep).pop();
     } else {
         avatar = gender === 'm' ? 'm.jpg' : 'w.jpg';
+        console.log(avatar, gender)
     }
     let data = req.sendData;
     try {
@@ -91,6 +92,7 @@ router.post('/create', function (req, res, next) {
             }
             if (e.message.match('duplicate key')) {
                 data.msg = '邮箱已被占用';
+                data.code = -1;
                 res.json(data);
                 return
             }

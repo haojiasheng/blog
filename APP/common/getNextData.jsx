@@ -18,11 +18,11 @@ function getNextData(that, initData) {
             that.path = getPath(path.init, initData);
             that.path.path = that.pathName;
         }
-        const callback = that.path.header.right.callback;
-        if (callback) {
+        const callbackState = that.path.header.right.callbackState;
+        if (callbackState === 1) {
             that.path.header.right.callback = that.rightCallback;
         }
-        that.props.pageChange(that.path)
+        that.props.pageChange(that.path);
     };
 
     that.readDOM = () => {
@@ -37,14 +37,16 @@ function getNextData(that, initData) {
     };
     that.initState(that.props);
     that.componentDidMount = () => {
-        that.readDOM();
         if (componentDidMount) {
             componentDidMount()
         }
+        that.readDOM();
     };
     that.componentWillUnmount = () => {
+        if (componentWillUnmount) {
+            componentWillUnmount()
+        }
         that.unMount();
-        componentWillUnmount()
     }
 }
 

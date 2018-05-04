@@ -131,9 +131,16 @@ export class CommentInput extends Component{
         return (
             <div style={commentStyle} className={style.commentInput}>
                 <div onInput={this.commentInput.bind(this)}  onBlur={this.commentInputBlur.bind(this)} onFocus={this.commentInputFocus.bind(this)} data-placeholder={commentPlaceholder} className={style.input} contentEditable={true}></div>
-                <span onClick={() => {this.props.postComment(this.state.commentValue)}}>发布</span>
+                <span onClick={this.postComment.bind(this)}>发布</span>
             </div>
         )
+    }
+    postComment () {
+        this.props.postComment(this.state.commentValue);
+        this.setState({
+            commentValue: ''
+        });
+        this.commentInput();
     }
     commentInputBlur (e) {
         const value = e.target.textContent;
@@ -148,7 +155,7 @@ export class CommentInput extends Component{
         const value = this.state.commentValue;
         e.target.textContent = value;
     }
-    commentInput (e) {
+    commentInput (e = {target: {textContent: ''}}) {
         const value = e.target.textContent;
         if (!value) {
             this.setState({
@@ -172,17 +179,18 @@ export class CommentInput extends Component{
 
 export class Comment extends Component{
     render () {
-        const {author, createAt, content} = this.props;
-        const likeStyle = 'notLike_icon.png';
+        const {author, createAt, content, commentLikeImg, commentLikeCount, addCommentLike} = this.props;
         const likeBg = {
-            background: `url(${require('../public/img/' + likeStyle)})`,
-            backgroundSize:  '0.5rem'
+            background: `url(${require('../public/img/' + commentLikeImg)}) no-repeat`
         };
         return (
             <div className={style.comment}>
                 <div className={style.commentHeader}>
                     <PostAvatar  author={author} createAt={createAt}  />
-                    <span style={likeBg} className={style.commentLike}></span>
+                    <div className={style.likeWrap}>
+                        <span style={likeBg} className={style.commentLike} onClick={addCommentLike}></span>
+                        <span className={style.likeCount}>{commentLikeCount}</span>
+                    </div>
                 </div>
                 <div className={style.commentContent}>
                     {content}
@@ -204,3 +212,4 @@ export class DataLoad extends Comment {
         )
     }
 }
+/*加载动画*/

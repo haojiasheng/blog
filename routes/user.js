@@ -7,7 +7,7 @@ const sha1 = require('sha1');
 
 router.get('/', function (req,res,next) {
     res.render('index');
-    res.json(req.session.user)
+    return res.json(req.session.user)
 });
 
 router.get('/init', function (req, res, next) {
@@ -18,8 +18,7 @@ router.get('/init', function (req, res, next) {
         data.code = -1;
         data.msg = '未登录';
     }
-    res.json(data);
-    next();
+    return res.json(data);
 });
 
 router.post('/signIn', function (req, res, next) {
@@ -53,8 +52,8 @@ router.post('/signIn', function (req, res, next) {
         data.msg = '登陆成功!';
         delete user.password;
         data.data = user;
-        res.json(data);
         req.session.user = data.data;
+        return res.json(data);
     })
         .catch(next)
 });

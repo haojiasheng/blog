@@ -4,6 +4,8 @@ module.exports = function (app) {
     app.use('/user', require('./user'));
     app.use('/post', require('./post'));
     app.use('/comment', require('./comment'));
+    app.use('/like', require('./like'));
+    app.use('/collect', require('./collect'));
     app.get('*', function (req, res, next) {
         res.render('index')
     })

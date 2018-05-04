@@ -145,16 +145,26 @@ $sign_width: 8.5rem;
   width: 100%;
   min-height: 1rem;
   border-bottom: 0.01rem solid #aaaaaa;
-  padding: 0.46rem 0.46rem 0.62rem 0.4rem;
+  padding: 0.46rem 0.2rem 0.62rem 0.4rem;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   .commentHeader {
     display: flex;
     justify-content: space-between;
-    .commentLike {
-      height: 0.5rem;
-      width: 0.5rem;
+    .likeWrap {
+      .commentLike {
+        height: 0.5rem;
+        width: 0.5rem;
+        background-position:0 0;
+        padding-left: 0.6rem;
+        background-size:  0.5rem !important;
+      }
+      .likeCount {
+        color: #aaaaaa;
+        font-size: 0.4rem;
+        line-height: 0.5rem;
+      }
     }
   }
   .commentContent{
@@ -199,6 +209,7 @@ $sign_width: 8.5rem;
   font-size: 0.35rem;
   color: #46c7f7;
   margin: 0.5rem auto;
+  height: 1rem;
   &.loading_true{
     margin: 0.5rem auto 1rem;
     animation: rotate-forever 1s infinite linear;
@@ -207,12 +218,10 @@ $sign_width: 8.5rem;
     border: 0.2rem solid #46c7f7;
     border-top-color: transparent;
     border-radius: 50%;
-    .msg {
-      display: none;
-    }
   }
   .msg {
     text-align: center;
+    line-height: 1rem;
   }
 }
 

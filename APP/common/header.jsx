@@ -20,10 +20,11 @@ function LeftDOM(props) {
 
 function RightDOM (props) {
     const {right, navigateTo} = props;
-    const {callback, content, src, notSelect_icons, icons} = right;
-    if (icons && notSelect_icons && callback) {
+    const {callback, content, src, notSelect_icons, icons, state, callbackState} = right;
+    if (icons && notSelect_icons && callbackState) {
+        let icon = state ? icons : notSelect_icons;
         const backgroundImg = {
-            background: `url(${require('../public/img/' + notSelect_icons)}) no-repeat`,
+            background: `url(${require('../public/img/' + icon)}) no-repeat`,
             backgroundSize: '0.6rem',
             backgroundPosition: '0 0'
         };
@@ -53,7 +54,8 @@ class Header extends Component{
         userInit(JSON.parse(localStorage.getItem('user')));
     }
     render () {
-        const {pathname} = this.context.router.route.location;
+        const location = this.context.router.route.location;
+        const pathname = location.pathname + location.search;
         let {path, user} = this.props;
         user = user || {};
         let data = path[pathname] || path.init;
@@ -106,7 +108,7 @@ function mapDispatchToProps(dispatch) {
         },
         changePage (data) {
             dispatch({
-                type: 'changePage',
+                type: 'pageChange',
                 path: data
             })
         }
