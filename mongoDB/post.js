@@ -39,5 +39,12 @@ module.exports = {
             .populate({path: 'author', model: 'User'})
             .addCreatedAt()
             .exec()
+    },
+    searchPostByKey (key) {
+        return Post
+            .find({$or: [{content: key}, {title: key}]})
+            .populate({path: 'author', model: 'User'})
+            .addCreatedAt()
+            .exec()
     }
 };

@@ -37,4 +37,13 @@ router.post('/like', function (req, res, next) {
     })
         .catch(next)
 });
+router.post('/unLike', function (req, res, next) {
+    const data = req.sendData;
+    const params = req.body;
+    CommentLike.unCommentLike(params).then(function (result) {
+        data.msg = '细细想来这人大概是在胡说八道~';
+        return res.json(data)
+    })
+        .catch(next)
+});
 module.exports = router;

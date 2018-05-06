@@ -6,6 +6,7 @@ module.exports = function (app) {
     app.use('/comment', require('./comment'));
     app.use('/like', require('./like'));
     app.use('/collect', require('./collect'));
+    app.use('/search', require('./search'))
     app.get('*', function (req, res, next) {
         res.render('index')
     })

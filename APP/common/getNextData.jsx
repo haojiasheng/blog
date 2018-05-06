@@ -46,6 +46,7 @@ function getNextData(that, initData) {
         if (componentWillUnmount) {
             componentWillUnmount()
         }
+        that.path.header.callback = null;
         that.unMount();
     }
 }

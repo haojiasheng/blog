@@ -6,23 +6,7 @@ class PostEdit extends Component{
     constructor (props) {
         super(props);
         this.rightCallback = () => {
-            const {history, createPost, user} = this.props;
-            const {content, title} = this.state;
-            const author = this.props.user._id;
-            const data = {
-                title,
-                content,
-                author
-            };
-            App.api.post('/post/create', data).then((res) => {
-                App.prompt(res.msg);
-                if (res.code === 0) {
-                    const post = res.data;
-                    post.author = user;
-                    createPost(post);
-                    history.goBack();
-                }
-            })
+            this.postCreate()
         };
         App.checkCompetence.checkLogin(this, true);
         App.getNextData(this, {
@@ -63,7 +47,25 @@ class PostEdit extends Component{
         })
     }
     postCreate () {
-
+        const {history, createPost, user} = this.props;
+        const {content, title} = this.state;
+        const author = this.props.user._id;
+        const data = {
+            title,
+            content,
+            author
+        };
+        App.api.post('/post/create', data).then((res) => {
+            App.prompt(res.msg);
+            if (res.code === 0) {
+                const post = res.data;
+                post.author = user;
+                post.commentCount = 0;
+                post.likeCount = 0;
+                createPost(post);
+                history.goBack();
+            }
+        })
     }
 }
 

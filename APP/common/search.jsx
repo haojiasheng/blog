@@ -6,25 +6,20 @@ import {connect} from 'react-redux';
 
 class Search extends Component{
     constructor (props) {
-        super(props);/*
-        App.api.post('/post/init').then((res) => {
-            if (res.code === 0) {
-                this.props.postInit(res.data)
-            }
-        })*/
+        super(props);
     }
     render () {
         const {pathname} = this.context.router.route.location;
         const {path} = this.props;
-        const data = path[pathname] || path.init;
-        const search = data.search;
+        this.path = path[pathname] || path.init;
+        const {search} = this.path;
         return (
             search.show && (<div onClick={this.searchPage.bind(this)} className={`${style.search} ${search.state === 1 ? style.searchPage : ''}`}>
                 <input ref={(input) => this.input = input} onInput={this.searchInput.bind(this)}  />
                 <span  onClick={this.goBack.bind(this)}>取消</span>
                 <div className={style.text}>
                     <span></span>
-                    <i>搜索</i>
+                    {!search.key && <i>搜索</i>}
                     <b></b>
                 </div>
             </div>)
@@ -36,9 +31,23 @@ class Search extends Component{
             this.context.router.history.push('/search');
         }
     }
-    searchInput () {
+    searchInput (e) {
+        const key = e.target.value;
+        const params = {
+            key
+        };
+        App.api.post('/search',params).then((res) => {
+                if (res.code === 0) {
+                    this.path.search.data = res.data;
+                    this.props.pageChange(this.path);
+                }
+            }
+        );
+        this.path.search.key = key;
+        this.props.pageChange(this.path);
     }
     goBack () {
+        this.input.value = '';
         this.context.router.history.goBack()
     }
 }
@@ -50,15 +59,15 @@ const mapStateToProps = (state) => ({
     path: state.path
 });
 
-/*function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
     return {
-        postInit (posts) {
+        pageChange (path) {
             dispatch({
-                type: 'postInit',
-                posts
+                type: 'pageChange',
+                path
             })
         }
     }
-};*/
+};
 
-export default connect(mapStateToProps)(Search)
+export default connect(mapStateToProps, mapDispatchToProps)(Search)

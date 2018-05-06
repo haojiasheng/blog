@@ -23,9 +23,6 @@ class Main extends Component{
             buttonStyle: null
         }
     }
-    componentWillMount () {
-        this.props.pageChange();
-    }
     render () {
         const buttonStyle = this.state.buttonStyle;
         return (
@@ -98,9 +95,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps (dispatch) {
     return {
-        pageChange () {
+        pageChange (path) {
             dispatch({
-                type: 'pageChange'
+                type: 'pageChange',
+                path: path
             });
         },
         signUp (data) {

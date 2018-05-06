@@ -234,3 +234,46 @@ $sign_width: 8.5rem;
     transform: rotate(360deg)
   }
 }
+
+
+.topic {
+  width: 100%;
+  border-bottom: 0.01rem solid #aaa;
+  border-top: 0.01rem solid #aaa;
+  box-sizing: border-box;
+  padding: 0.454rem 0.93rem 0.3rem 0.463rem;
+  background: #ffffff;
+  margin-bottom: 0.2rem;
+  box-shadow: 0 0.027rem 0.01rem 0.01rem #ccc;
+  &:first-child{
+    border-top: 0;
+  }
+  h3{
+    font-size: 0.42rem;
+    margin: 0.454rem 0 0.35rem 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }/*
+  p{
+    font-size: 0.35rem;
+    line-height: 0.6rem;
+    margin-bottom: 0.2rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }*/
+  .commentWrap{
+    overflow: hidden;
+    span{
+      color: #b5b5b5;
+      font-size: 0.35rem;
+      float: left;
+      &.commentCount{
+        float: right;
+      }
+    }
+  }
+}

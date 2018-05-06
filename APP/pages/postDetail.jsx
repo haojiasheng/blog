@@ -10,34 +10,7 @@ class postDetail extends Component{
     constructor (props) {
         super(props);
         this.rightCallback = () => {  /*header右边回调函数*/
-            App.checkCompetence.checkLogin(this);
-            const {post} = this.path.data;
-            const state = this.path.header.right.state;
-            let {user} = this.props;
-            user = user || {};
-            const data = {
-                userId: user._id,
-                postId: post._id
-            };
-            if (state) {
-                App.api.post('/collect/cancel', data).then((res) => {
-                    if (res.code === 0) {
-                        this.path.header.right.state = false;
-                        --this.path.data.post.collectCount;
-                        this.props.pageChange(this.path);
-                        App.prompt(res.msg);
-                    }
-                });
-            } else {
-                App.api.post('/collect', data).then((res) => {
-                    if (res.code === 0) {
-                        this.path.header.right.state = true;
-                        ++this.path.data.post.collectCount;
-                        this.props.pageChange(this.path);
-                        App.prompt(res.msg)
-                    }
-                });
-            }
+            this.addCollect()
         };
         App.getNextData(this, {
             header: {
@@ -69,7 +42,6 @@ class postDetail extends Component{
         let {post, loadAnimation, loadMessage, like} = this.path.data;
         post = post || {};
         let comments = post.comments;
-        console.log(comments)
         const {author, createAt, title, content, collectCount} = post;
         let likeImg = like ? 'like_icon.png' : 'notLike_icon.png';
         const likeBgImg = {
@@ -106,25 +78,67 @@ class postDetail extends Component{
         this.props.postsChange(this.posts);
     }
     addCommentLike (index) {
+        App.checkCompetence.checkLogin(this);
         const {comments} = this.path.data.post;
         const {user} = this.props;
         const commentLike = comments[index].commentLike;
         const params = {
             userId: user._id,
             commentId: comments[index]._id
-        }
-        if (commentLike) {
-            this.path.data.post.comments[index].commentLike = false
-        } else {
+        };
+        if (!commentLike) {
             App.api.post('/comment/like', params).then(
                 (res) => {
                     if (res.code === 0) {
                         this.path.data.post.comments[index].commentLike = true;
                         ++this.path.data.post.comments[index].commentLikeCount;
                         this.props.pageChange(this.path);
+                        App.prompt(res.msg)
                     }
                 }
             );
+        } else {
+            App.api.post('/comment/unLike', params).then(
+                (res) => {
+                    if (res.code === 0) {
+                        this.path.data.post.comments[index].commentLike = false;
+                        --this.path.data.post.comments[index].commentLikeCount;
+                        this.props.pageChange(this.path);
+                        App.prompt(res.msg)
+                    }
+                }
+            );
+            this.path.data.post.comments[index].commentLike = false
+        }
+    }
+    addCollect () {
+        App.checkCompetence.checkLogin(this);
+        const {post} = this.path.data;
+        const state = this.path.header.right.state;
+        let {user} = this.props;
+        user = user || {};
+        const data = {
+            userId: user._id,
+            postId: post._id
+        };
+        if (state) {
+            App.api.post('/collect/cancel', data).then((res) => {
+                if (res.code === 0) {
+                    this.path.header.right.state = false;
+                    --this.path.data.post.collectCount;
+                    this.props.pageChange(this.path);
+                    App.prompt(res.msg);
+                }
+            });
+        } else {
+            App.api.post('/collect', data).then((res) => {
+                if (res.code === 0) {
+                    this.path.header.right.state = true;
+                    ++this.path.data.post.collectCount;
+                    this.props.pageChange(this.path);
+                    App.prompt(res.msg)
+                }
+            });
         }
     }
     addLike () {
@@ -142,7 +156,7 @@ class postDetail extends Component{
                     this.path.data.like = true;
                     this.props.pageChange(this.path);
                     App.prompt(res.msg);
-                    this.postsChange('likeCount', true);
+                    this.postsChangeOfCount('likeCount', true);
                 }
             });
         } else {
@@ -151,7 +165,7 @@ class postDetail extends Component{
                     this.path.data.like = false;
                     this.props.pageChange(this.path);
                     App.prompt(res.msg);
-                    this.postsChange('likeCount', false)
+                    this.postsChangeOfCount('likeCount', false)
                 }
             });
         }
@@ -201,11 +215,11 @@ class postDetail extends Component{
                 const offsetHeight = parseFloat(window.getComputedStyle(App.DOM).height);
                 const clientHeight = parseFloat(document.documentElement.clientHeight);
                 window.scroll(0, offsetHeight - clientHeight);
-                this.postsChange('commentCount', true);
+                this.postsChangeOfCount('commentCount', true);
             }
         })
     }
-    postsChange (key, state) {
+    postsChangeOfCount (key, state) {
         const searchIndex = getSearch('index');
         if (this.posts.length-1 >= searchIndex) {
             if (state) {

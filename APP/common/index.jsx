@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import style from '../public/css/commonIndex.scss';
 import moment from 'moment';
+import PropTypes from 'prop-types';
 
 export class SignButton extends Component{
     render () {
@@ -213,3 +214,28 @@ export class DataLoad extends Comment {
     }
 }
 /*加载动画*/
+
+
+
+export class Topic extends Component{
+    render () {
+        const {author, createAt, _id, title, commentCount, likeCount, index} = this.props;
+        return (
+            <li className={style.topic} onClick={this.navigateTo.bind(this, _id, index)}>
+                <PostAvatar author={author} createAt={createAt} />
+                <h3>{title}</h3>
+                <div className={style.commentWrap}>
+                    <span>{likeCount}人喜欢</span>
+                    <span className={style.commentCount}>{commentCount}条评论</span>
+                </div>
+            </li>
+        )
+    }
+    navigateTo (id, index) {
+        this.context.router.history.push(`/postDetail/${id}?index=${index}`);
+    }
+}
+Topic.contextTypes = {
+    router: PropTypes.object.isRequired
+};
+/*文章一部分内容展示*/

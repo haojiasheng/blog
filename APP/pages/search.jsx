@@ -15,11 +15,16 @@ class SearchPage extends Component{
         });
     }
     render () {
+        const {data} = this.props.path.search;
         return (
             <div>
-                1
+
             </div>
         )
+    }
+    componentWillUnmount () {
+        this.path.search.key = undefined;
+        this.path.search.data = null;
     }
 }
 

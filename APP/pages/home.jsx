@@ -1,8 +1,7 @@
 import React,{ Component } from 'react';
 import {connect} from 'react-redux';
 import style from '../public/css/home.scss';
-import PropTypes from 'prop-types';
-import {PostAvatar, DataLoad} from '../common/index';
+import {DataLoad, Topic} from '../common/index';
 
 class Main extends Component {
     constructor (props) {
@@ -50,11 +49,6 @@ class Main extends Component {
         const {posts} = this.props;
         if (!posts.length) {
             this.loadData();
-        } else {
-            this.setState({
-                page: this.path.data.page,
-                loadAnimation: false
-            });
         }
     }
     componentWillUnmount () {
@@ -70,15 +64,11 @@ class Main extends Component {
             if (res.code === 0) {
                 const data = res.data;
                 if (data.length === 0) {
-                    this.setState({
-                        loadAnimation: false,
-                        loadMessage: '加载完毕'
-                    });
+                    this.path.data.loadAnimation = false;
+                    this.path.data.loadMessage = '加载完毕';
                 } else {
-                    this.setState({
-                        loadAnimation: false,
-                        page
-                    });
+                    this.path.data.loadAnimation = false;
+                    this.path.data.page = page;
                 }
                 postAdd(data);
                 this.componentOffset();
@@ -91,9 +81,7 @@ class Main extends Component {
             let srcoll = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
             if (this.clientHeight + srcoll >= this.offset && this.offset > 1000) {
                 if (!this.path.data.loadAnimation && !this.path.data.loadMessage) {
-                    this.setState({
-                        loadAnimation: true
-                    });
+                    this.path.data.loadAnimation = true;
                     this.loadData();
                 }
             } else {
@@ -105,29 +93,6 @@ class Main extends Component {
         this.offset = parseFloat(window.getComputedStyle(App.DOM).height) - 10;
     }
 }
-
-
-class Topic extends Component{
-    render () {
-        const {author, createAt, _id, title, commentCount, likeCount, index} = this.props;
-        return (
-            <li className={style.topic} onClick={this.navigateTo.bind(this, _id, index)}>
-                <PostAvatar author={author} createAt={createAt} />
-                <h3>{title}</h3>
-                <div className={style.commentWrap}>
-                    <span>{likeCount}人喜欢</span>
-                    <span className={style.comment}>{commentCount}条评论</span>
-                </div>
-            </li>
-        )
-    }
-    navigateTo (id, index) {
-        this.context.router.history.push(`/postDetail/${id}?index=${index}`);
-    }
-}
-Topic.contextTypes = {
-    router: PropTypes.object.isRequired
-};
 
 const mapStateToProps = (state) => ({
     posts: state.posts,
