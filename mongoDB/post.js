@@ -1,17 +1,15 @@
 const Post = require('./index').Post;
-const Comment = require('./comment');
-const Like = require('./like');
 
 Post.plugin('addCommentsAndLikeCount', {
     afterFind: function (posts) {
-        return Promise.all(posts.map(function (post) {
-            let id = post._id;
-            return Promise.all([Comment.getPostCommentCount(id), Like.getPostLikeCount(id)]).then(function (result) {
-                post.commentCount = result[0];
-                post.likeCount = result[1];
-                return post;
-            })
-        }))
+        return posts.map(function (post) {
+            if (post.like) {
+                post.likeCount = post.like.length;
+            } else {
+                post.likeCount = 0;
+            }
+            return post
+        })
     }
 });
 
@@ -45,6 +43,31 @@ module.exports = {
             .find({$or: [{content: key}, {title: key}]})
             .populate({path: 'author', model: 'User'})
             .addCreatedAt()
+            .addCommentsAndLikeCount()
             .exec()
+    },
+    userLike (postId, userId) {
+        return Post.update({_id: postId}, {$addToSet: {like: userId}}).exec();
+    },
+    userUnLike (postId, userId) {
+        return Post.update({_id: postId}, {$pull: {like: userId}}).exec();
+    },
+    checkUserLike (postId, userId) {
+        return Post.count({_id: postId, like: userId}).exec()
+    },
+    userCollect (postId, userId) {
+        return Post.update({_id: postId}, {$addToSet: {collect: userId}}).exec();
+    },
+    userUnCollect (postId, userId) {
+        return Post.update({_id: postId}, {$pull: {collect: userId}}).exec();
+    },
+    getCollectCount (postId) {
+        return Post.count({_id: postId}).exec();
+    },
+    checkUserCollect (postId, userId) {
+        return Post.count({_id: postId, collect: userId}).exec();
+    },
+    commentCountIncrease: function (postId) {
+        return Post.update({_id: postId}, {$inc: {commentCount: 1}}).exec();
     }
 };

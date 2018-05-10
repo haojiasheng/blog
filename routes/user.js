@@ -1,7 +1,5 @@
-const path = require('path');
 const express = require('express');
 const router = express.Router();
-const fs = require('fs');
 const User = require('../mongoDB/user');
 const sha1 = require('sha1');
 

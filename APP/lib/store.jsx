@@ -62,7 +62,7 @@ function path(path = {
         search: {
             show: false, /*是否显示搜索框*/
             state: 0, /*如果值为1将到搜索页面*/
-            data: null, /*存放搜索的数据*/
+            data: [], /*存放搜索的数据*/
             key: ''/*存放搜索的关键词*/
         },
         data: null /*页面数据*/

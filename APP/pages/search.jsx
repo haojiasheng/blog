@@ -1,5 +1,7 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
+import style from '../public/css/search.scss';
+import {Topic} from '../common/index';
 
 
 class SearchPage extends Component{
@@ -15,16 +17,22 @@ class SearchPage extends Component{
         });
     }
     render () {
-        const {data} = this.props.path.search;
+        const {data} = this.path.search;
         return (
             <div>
-
+                <div className={style.post}>
+                    {
+                        data.map((post) => {
+                            return <Topic key={post._id} {...post}/>
+                        })
+                    }
+                </div>
             </div>
         )
     }
     componentWillUnmount () {
         this.path.search.key = undefined;
-        this.path.search.data = null;
+        this.path.search.data = [];
     }
 }
 

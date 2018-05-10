@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Comment = require('../mongoDB/comment');
-const CommentLike = require('../mongoDB/commentLike');
+const User = require('../mongoDB/user');
+const Post = require('../mongoDB/post');
 
 router.post('/', function (req, res, next) {
     const data = req.sendData;
@@ -20,9 +21,12 @@ router.post('/', function (req, res, next) {
         return;
     }
     Comment.createComment(comment).then(function (result) {
-        return Comment.getCommentById(result.ops[0]._id);
-    }).then(function (comment) {
-        data.data = comment;
+        data.data = result.ops[0];
+        const postId = result.ops[0].postId;
+        const userId = result.ops[0].author;
+        return Promise.all([User.getUserById(userId), Post.commentCountIncrease(postId)]);
+    }).then(function (user) {
+        data.data.author = user[0];
         return res.json(data);
     })
         .catch(next)
@@ -30,8 +34,9 @@ router.post('/', function (req, res, next) {
 
 router.post('/like', function (req, res, next) {
     const data = req.sendData;
-    const params = req.body;
-    CommentLike.addCommentLike(params).then(function (result) {
+    const commentId = req.body.commentId;
+    const userId = req.body.userId;
+    Comment.commentLike(commentId, userId).then(function (result) {
         data.msg = '说的好有道理哦~';
         return res.json(data)
     })
@@ -39,11 +44,13 @@ router.post('/like', function (req, res, next) {
 });
 router.post('/unLike', function (req, res, next) {
     const data = req.sendData;
-    const params = req.body;
-    CommentLike.unCommentLike(params).then(function (result) {
+    const commentId = req.body.commentId;
+    const userId = req.body.userId;
+    Comment.commentUnLike(commentId, userId).then(function (result) {
         data.msg = '细细想来这人大概是在胡说八道~';
         return res.json(data)
     })
         .catch(next)
 });
+
 module.exports = router;

@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import style from '../public/css/search.scss';
+import style from '../public/css/commonSearch.scss';
 import { PropTypes } from 'prop-types';
 import {connect} from 'react-redux';
 
@@ -32,17 +32,21 @@ class Search extends Component{
         }
     }
     searchInput (e) {
-        const key = e.target.value;
+        const key = e.target.value.toString().trim();
         const params = {
             key
         };
-        App.api.post('/search',params).then((res) => {
-                if (res.code === 0) {
-                    this.path.search.data = res.data;
-                    this.props.pageChange(this.path);
+        if( key !== '') {
+            App.api.post('/search',params).then((res) => {
+                    if (res.code === 0) {
+                        this.path.search.data = res.data;
+                        this.props.pageChange(this.path);
+                    }
                 }
-            }
-        );
+            );
+        } else {
+            this.path.search.data = [];
+        }
         this.path.search.key = key;
         this.props.pageChange(this.path);
     }
@@ -68,6 +72,6 @@ function mapDispatchToProps(dispatch) {
             })
         }
     }
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search)

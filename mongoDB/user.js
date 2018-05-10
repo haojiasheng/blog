@@ -7,5 +7,8 @@ module.exports = {
     },
     getUserInfo (Email) {
         return User.findOne({Email: Email}).exec();
+    },
+    getUserById (id) {
+        return User.findOne({_id: id}).exec()
     }
 };

@@ -122,7 +122,7 @@ class postDetail extends Component{
             postId: post._id
         };
         if (state) {
-            App.api.post('/collect/cancel', data).then((res) => {
+            App.api.post('/post/unCollect', data).then((res) => {
                 if (res.code === 0) {
                     this.path.header.right.state = false;
                     --this.path.data.post.collectCount;
@@ -131,7 +131,7 @@ class postDetail extends Component{
                 }
             });
         } else {
-            App.api.post('/collect', data).then((res) => {
+            App.api.post('/post/collect', data).then((res) => {
                 if (res.code === 0) {
                     this.path.header.right.state = true;
                     ++this.path.data.post.collectCount;
@@ -151,7 +151,7 @@ class postDetail extends Component{
             postId: post._id
         };
         if (like === false) {
-            App.api.post('/like', data).then((res) => {
+            App.api.post('/post/like', data).then((res) => {
                 if (res.code === 0) {
                     this.path.data.like = true;
                     this.props.pageChange(this.path);
@@ -160,7 +160,7 @@ class postDetail extends Component{
                 }
             });
         } else {
-            App.api.post('/like/cancel', data).then((res) => {
+            App.api.post('/post/unLike', data).then((res) => {
                 if (res.code === 0) {
                     this.path.data.like = false;
                     this.props.pageChange(this.path);

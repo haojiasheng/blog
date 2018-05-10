@@ -61,10 +61,20 @@ const Post = mongolass.model('Post', {
         type: 'string',
         require: true
     },
-    collect: {
+    commentCount: {
         type: 'number',
         default: 0
-    }
+    },
+    like: [
+        {
+            type:  Mongolass.Types.ObjectId
+        }
+    ],
+    collect: [
+        {
+            type:  Mongolass.Types.ObjectId
+        }
+    ]
 });
 Post.index({author: 1, _id: -1}).exec();
 
@@ -81,52 +91,17 @@ const Comment = mongolass.model('Comment', {
     postId: {
         type: Mongolass.Types.ObjectId,
         require: true
-    }
-});
-Comment.index({postId: 1}, {_id: -1});
-
-const Like = mongolass.model('Like', {
-    postId: {
-        type: Mongolass.Types.ObjectId,
-        require: true
     },
-    userId: {
-        type: Mongolass.Types.ObjectId,
-        require: true
-    }
+    commentLike: [
+        {
+            type: Mongolass.Types.ObjectId
+        }
+    ]
 });
-Like.index({userId: 1}).exec();
-
-const Collect = mongolass.model('Collect', {
-    postId: {
-        type: Mongolass.Types.ObjectId,
-        require: true
-    },
-    userId: {
-        type: Mongolass.Types.ObjectId,
-        require: true
-    }
-});
-Collect.index({postId: 1}).exec();
-
-
-const CommentLike = mongolass.model('CommentLike', {
-    commentId: {
-        type: Mongolass.Types.ObjectId,
-        require: true
-    },
-    userId: {
-        type: Mongolass.Types.ObjectId,
-        require: true
-    }
-});
-CommentLike.index({postId: 1}, {userId: -1}).exec();
+Comment.index({postId: 1, _id: 1}).exec();
 
 module.exports = {
     User,
     Post,
-    Comment,
-    Like,
-    Collect,
-    CommentLike
+    Comment
 };

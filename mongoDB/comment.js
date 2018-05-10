@@ -1,22 +1,20 @@
 const Comment = require('../mongoDB').Comment;
-const CommentLike = require('../mongoDB/commentLike');
 
 Comment.plugin('addCommentLike', {
     afterFind: function (comments, userId) {
         return Promise.all(comments.map(function (comment) {
-            const params = {
-                commentId: comment._id,
-                userId: userId
-            };
-            return Promise.all([CommentLike.getCommentLikeCount(comment._id), CommentLike.checkUserCommentLike(params)]).then(function (result) {
-                comment.commentLikeCount = result[0];
-                comment.commentLike = !!result[1];
-                return comment;
+                return Comment.count({_id: comment._id, commentLike: userId}).exec().then(function (result) {
+                        if (comment.commentLike) {
+                            comment.commentLikeCount = comment.commentLike.length;
+                        } else {
+                            comment.commentLikeCount = 0;
+                        }
+                        comment.commentLike = !!result;
+                        return comment
+                    }
+                )
             })
-                .catch(function (e) {
-                    console.log(e)
-                })
-        }))
+        )
     }
 });
 
@@ -33,15 +31,13 @@ module.exports = {
             .populate({path: 'author', model: 'User'})
             .sort({_id: 1})
             .addCommentLike(userId)
-            .addCreatedAt().exec();
-    },
-    getCommentById: function (id) {
-        return Comment.findOne({_id: id})
-            .populate({path: 'author', model: 'User'})
             .addCreatedAt()
             .exec();
     },
-    getPostCommentCount: function (postId) {
-        return Comment.count({postId: postId}).exec()
+    commentLike: function (commentId, userId) {
+        return Comment.update({_id: commentId}, {$addToSet: {commentLike: userId}}).exec()
+    },
+    commentUnLike: function (commentId, userId) {
+        return Comment.update({_id: commentId}, {$pull: {commentLike: userId}}).exec()
     }
 };

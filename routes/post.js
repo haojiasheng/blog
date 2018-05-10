@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../mongoDB/post');
 const Comment = require('../mongoDB/comment');
-const Like = require('../mongoDB/like');
-const Collect = require('../mongoDB/collect');
 
 router.get('/', function (req, res, next) {
     res.render('index')
@@ -51,26 +49,63 @@ router.post('/detail', function (req, res, next) {
     let data = req.sendData;
     const id = req.body.id;
     const userId = req.body.userId.toString().trim() || 1;
-    const params = {
-        postId: id,
-        userId: userId
-    };
-    Promise.all([Post.getPostByid(id), Comment.getCommentByPostId(id, userId), Like.checkUserLike(params), Collect.getCollectCount(id), Collect.checkUserCollect(params)]).then(function (result) {
+    Promise.all([Post.getPostByid(id), Comment.getCommentByPostId(id, userId), Post.checkUserLike(id, userId), Post.getCollectCount(id), Post.checkUserCollect(id, userId)]).then(function (result) {
         let post = result[0];
         if (!post) {
             res.msg = '该文章不存在';
             res.code = -1;
         }
-        post.like = false;
         post.comments = result[1];
-        post.like = !!result[2].length;
+        post.like = !!result[2];
         post.collectCount = result[3];
-        console.log()
-        post.collect = !!result[4].length;
+        post.collect = !!result[4];
         data.data = post;
         return res.json(data);
     })
         .catch(next)
 });
 
+router.post('/like', function (req, res, next) {
+    let data = req.sendData;
+    const postId = req.body.postId;
+    const userId = req.body.userId;
+    Post.userLike(postId, userId).then(function (result) {
+        data.msg = '你喜欢了这篇文章';
+        return res.json(data);
+    })
+        .catch(next)
+});
+
+router.post('/unLike', function (req, res, next) {
+    let data = req.sendData;
+    const postId = req.body.postId;
+    const userId = req.body.userId;
+    Post.userUnLike(postId, userId).then(function (result) {
+        data.msg = '你变心了';
+        return res.json(data);
+    })
+        .catch(next)
+});
+
+router.post('/collect',function (req, res, next) {
+    const data = req.sendData;
+    const postId = req.body.postId;
+    const userId = req.body.userId;
+    Post.userCollect(postId, userId).then(function (result) {
+        data.msg = '收藏成功!';
+        return res.json(data)
+    })
+        .catch(next)
+});
+
+router.post('/unCollect',function (req, res, next) {
+    const data = req.sendData;
+    const postId = req.body.postId;
+    const userId = req.body.userId;
+    Post.userUnCollect(postId, userId).then(function (result) {
+        data.msg = '取消收藏';
+        return res.json(data)
+    })
+        .catch(next)
+});
 module.exports = router;
