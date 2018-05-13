@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --open --mode development",
-    "build": "webpack --mode production"
+    "dev": "webpack-dev-server --open --mode development",
+    "build": "webpack --mode production",
+    "start": "set NODE_ENV=production && pm2 start index.js --name 'jsblog'"
   },
   "author": "",
   "license": "ISC",

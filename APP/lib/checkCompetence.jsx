@@ -10,13 +10,15 @@ export default {
             }
             return false;
         }
+        return true
     },
     checkNotLogin (that) {
         const {user, history} = that.props;
         if (user) {
             App.prompt('已登录');
             history.goBack('back');
-            return false;
+            return true;
         }
+        return false
     }
 }

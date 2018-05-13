@@ -48,20 +48,7 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['env', 'react']/*,
-                        env: {
-                            development: {
-                                plugins: [["react-transform", {
-                                    transforms: [{
-                                        transform: "react-transform-hmr",
-
-                                        imports: ["react"],
-
-                                        locals: ["module"]
-                                    }]
-                                }]]
-                            }
-                        }*/
+                        presets: ['stage-1', 'react']/*env*/
                     }
                 },
                 exclude: /node_modules/
@@ -79,24 +66,6 @@ module.exports = {
             },
             {
                 test: /(\.sass|\.css|\.scss)$/,
-                /*loader: ExtractTextPlugin.extract(
-                        {
-                            loader: 'style-loader'
-                        },
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                modules: true,
-                                localIdentName: '[name]__[local]--[hash:base64:5]'
-                            }
-                        },
-                        {
-                            loader: 'sass-loader'
-                        },
-                        {
-                            loader: 'postcss-loader'
-                        }
-                )*/
                 use: [
                     {
                         loader: 'style-loader',

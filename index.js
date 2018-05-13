@@ -36,7 +36,7 @@ app.use(function (req, res, next) {
         msg: '操作成功！',
         data: null
     };
-    res.setHeader("Access-Control-Allow-Origin", "*")
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001")
     next()
 })
 

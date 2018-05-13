@@ -50,8 +50,8 @@ class Header extends Component{
             if (res.code === 0) {
                 userInit(res.data);
             }
-        });
-        userInit(JSON.parse(localStorage.getItem('user')));
+        });/*
+        userInit(JSON.parse(localStorage.getItem('user')));*/
     }
     render () {
         const location = this.context.router.route.location;

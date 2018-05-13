@@ -78,7 +78,10 @@ class postDetail extends Component{
         this.props.postsChange(this.posts);
     }
     addCommentLike (index) {
-        App.checkCompetence.checkLogin(this);
+        const login = App.checkCompetence.checkLogin(this);
+        if (!login) {
+            return
+        }
         const {comments} = this.path.data.post;
         const {user} = this.props;
         const commentLike = comments[index].commentLike;
@@ -112,7 +115,10 @@ class postDetail extends Component{
         }
     }
     addCollect () {
-        App.checkCompetence.checkLogin(this);
+        const login = App.checkCompetence.checkLogin(this);
+        if (!login) {
+            return
+        }
         const {post} = this.path.data;
         const state = this.path.header.right.state;
         let {user} = this.props;
@@ -142,10 +148,13 @@ class postDetail extends Component{
         }
     }
     addLike () {
+        const login = App.checkCompetence.checkLogin(this);
+        if (!login) {
+            return
+        }
         const {like, post} = this.path.data;
         let {user} = this.props;
         user = user || {};
-        App.checkCompetence.checkLogin(this);
         const data = {
             userId: user._id,
             postId: post._id
@@ -197,7 +206,10 @@ class postDetail extends Component{
         })
     }
     postComment (value) {
-        App.checkCompetence.checkLogin(this);
+        const login = App.checkCompetence.checkLogin(this);
+        if (!login) {
+            return
+        }
         const {user} = this.props;
         const {post} = this.path.data;
         const comments = post.comments;

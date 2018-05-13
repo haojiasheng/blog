@@ -1,45 +1,40 @@
 import React from 'react';
 import { Route, BrowserRouter, Switch, Redirect} from 'react-router-dom';
+import asyncComponent from '../lib/asyncComponent';
 import Header from '../common/header';
 import Search from '../common/search';
 import Prompt from '../common/prompt';
 import Side from '../common/side';
-import home from '../pages/home';
-import SearchPage from '../pages/search';
-import SignUp from '../pages/signup';
-import SignIn from '../pages/signin';
-import postDetail from '../pages/postDetail';
-import postEdit from '../pages/postEdit';
 
 const routes = [
     {
         path: '/',
-        component: home,
+        component: asyncComponent(() => import('../pages/home'))/*home*/,
         exact: true
     },
     {
         path: '/search',
-        component: SearchPage,
+        component: asyncComponent(() => import('../pages/search'))/*SearchPage*/,
         exact: false
     },
     {
         path: '/signUp',
-        component: SignUp,
+        component: asyncComponent(() => import('../pages/signup'))/*SignUp*/,
         exact: false
     },
     {
         path: '/signIn',
-        component: SignIn,
+        component: asyncComponent(() => import('../pages/signin'))/*SignIn*/,
         exact: false
     },
     {
         path: '/postDetail/:id',
-        component: postDetail,
+        component: asyncComponent(() => import('../pages/postDetail'))/*postDetail*/,
         exact: false
     },
     {
         path: '/postEdit',
-        component: postEdit,
+        component: asyncComponent(() => import('../pages/postEdit'))/*postEdit*/,
         exact: false
     }
 ];

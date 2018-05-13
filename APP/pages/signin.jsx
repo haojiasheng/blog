@@ -6,7 +6,10 @@ import {SignInput, SignButton} from '../common/index';
 class SignIn extends Component{
     constructor (props) {
         super(props);
-        App.checkCompetence.checkNotLogin(this);
+        const login = App.checkCompetence.checkNotLogin(this);
+        if (login) {
+            return
+        }
         App.getNextData(this, {
             header: {
                 show: true,
@@ -71,8 +74,8 @@ class SignIn extends Component{
             };
             App.api.post('/user/signIn', params).then((res) => {
                 if (res.code === 0) {
-                    userInit(res.data);
-                    localStorage.setItem('user', JSON.stringify(res.data));
+                    userInit(res.data);/*
+                    localStorage.setItem('user', JSON.stringify(res.data));*/
                     history.goBack()
                 }
                 App.prompt(res.msg)

@@ -3,7 +3,6 @@ import {SignButton, SignInput, SignTextarea, SignImg, SignGender} from '../commo
 import style from '../public/css/signup.scss';
 import {connect} from 'react-redux';
 
-
 class Main extends Component{
     constructor (props) {
         super(props);
@@ -54,8 +53,8 @@ class Main extends Component{
             App.api.post('/signUp/create', formData).then((res) => {
                 App.prompt(res.msg);
                 if (res.code === 0) {
-                    signUp(res.data);
-                    localStorage.setItem('user', JSON.stringify(res.data))
+                    signUp(res.data);/*
+                    localStorage.setItem('user', JSON.stringify(res.data))*/
                     history.goBack()
                 }
             })

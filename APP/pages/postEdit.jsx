@@ -8,7 +8,10 @@ class PostEdit extends Component{
         this.rightCallback = () => {
             this.postCreate()
         };
-        App.checkCompetence.checkLogin(this, true);
+        const login = App.checkCompetence.checkLogin(this, true);
+        if (!login) {
+            return
+        }
         App.getNextData(this, {
             header: {
                 content: '发布',
