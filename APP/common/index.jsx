@@ -100,10 +100,14 @@ export class PostAvatar extends Component{
         const {author, createAt} = this.props;
         let bgAvatar = {};
         if (author) {
-            bgAvatar = {
-                background: `url(${require('../public/img/avatar/'+ author.avatar)}) no-repeat`,
-                backgroundSize: '1rem'
-            };
+            try{
+                bgAvatar = {
+                    background: `url(${require('../public/img/avatar/'+ author.avatar)}) no-repeat`,
+                    backgroundSize: '1rem'
+                };
+            }catch (e) {
+                window.location.reload()
+            }
         }
         return (
             !!author && <div className={style.postAvatar}>

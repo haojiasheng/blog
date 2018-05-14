@@ -36,7 +36,8 @@ class SignIn extends Component{
         const borderStyle = {
             borderBottom: '0.01rem solid #999'
         };
-        const buttonStyle = this.state.buttonStyle;
+        this.state = this.state || {};
+        const buttonStyle = this.state.buttonStyle || {};
         return (
             <div>
                 <div className={style.imgWrap}>

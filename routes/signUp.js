@@ -30,6 +30,7 @@ router.use(require('express-formidable')({
 }));
 
 router.post('/create', function (req, res, next) {
+    let data = req.sendData;
     const Email = req.fields.Email;
     const nikeName = req.fields.nikeName;
     const bio = req.fields.bio;
@@ -41,9 +42,7 @@ router.post('/create', function (req, res, next) {
         avatar = req.files.avatar.path.split(path.sep).pop();
     } else {
         avatar = gender === 'm' ? 'm.jpg' : 'w.jpg';
-        console.log(avatar, gender)
     }
-    let data = req.sendData;
     try {
         if (!Email.length) {
             throw new Error('请输入邮箱');
@@ -84,11 +83,11 @@ router.post('/create', function (req, res, next) {
         data.data = user;
         data.msg = '恭喜！注册成功！';
         req.session.user = user;
-        res.json(data);
+        res.json(data)
     })
         .catch(function (e) {
-            if (req.files.avatar) {
-                fs.unlink(req.files.avatar.path);
+            if (files.avatar) {
+                fs.unlink(files.avatar.path);
             }
             if (e.message.match('duplicate key')) {
                 data.msg = '邮箱已被占用';

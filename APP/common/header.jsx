@@ -4,11 +4,16 @@ import {connect}  from 'react-redux';
 import PropTypes from 'prop-types';
 
 function LeftDOM(props) {
-    const {left, user, avatar, that} = props;
+    let {left, user, avatar, that} = props;
+    try {
+        avatar = require(`../public/img/avatar/${avatar}`)
+    } catch (e) {
+        window.location.reload()
+    }
     if (left.avatar && user.Email) {
         return (
             <div className={style.avatar}>
-                <img onClick={that.sideAppear.bind(that)} src={require(`../public/img/avatar/${avatar}`)} />
+                <img onClick={that.sideAppear.bind(that)} src={avatar} />
             </div>
         )
     } else if (left.back) {
@@ -50,8 +55,8 @@ class Header extends Component{
             if (res.code === 0) {
                 userInit(res.data);
             }
-        });/*
-        userInit(JSON.parse(localStorage.getItem('user')));*/
+        });
+        userInit(JSON.parse(localStorage.getItem('user')));
     }
     render () {
         const location = this.context.router.route.location;
