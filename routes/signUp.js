@@ -20,9 +20,6 @@ var createFolder = function(folder){
 var uploadFolder = './APP/public/img/avatar/';
 createFolder(uploadFolder);
 
-router.get('/', function (req, res, next) {
-    res.render('index')
-});
 
 router.use(require('express-formidable')({
     uploadDir: path.join(__dirname, '../APP/public/img/avatar'),

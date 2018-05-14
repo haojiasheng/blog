@@ -35,7 +35,7 @@ module.exports = {
     },
     devServer: {
         contentBase: './APP/static',
-        port: 3001,
+        port: 80,
         inline: true,
         historyApiFallback: true/*,
         openPage: 'index.ejs'*/,

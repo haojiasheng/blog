@@ -3,10 +3,6 @@ const router = express.Router();
 const Post = require('../mongoDB/post');
 const Comment = require('../mongoDB/comment');
 
-router.get('/', function (req, res, next) {
-    res.render('index')
-});
-
 router.post('/init', function (req, res, next) {
     const data = req.sendData;
     const author = req.body.author;

@@ -102,7 +102,7 @@ export class PostAvatar extends Component{
         if (author) {
             try{
                 bgAvatar = {
-                    background: `url(${require('../public/img/avatar/'+ author.avatar)}) no-repeat`,
+                    background: `url('http://139.224.11.44:3000/public/img/avatar/'${author.avatar}) no-repeat`,/*http://localhost*/
                     backgroundSize: '1rem'
                 };
             }catch (e) {

@@ -3,10 +3,6 @@ const router = express.Router();
 const User = require('../mongoDB/user');
 const sha1 = require('sha1');
 
-router.get('/', function (req,res,next) {
-    res.render('index');
-    return res.json(req.session.user)
-});
 
 router.get('/init', function (req, res, next) {
     let data = req.sendData;

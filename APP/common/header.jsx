@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 function LeftDOM(props) {
     let {left, user, avatar, that} = props;
     try {
-        avatar = require(`../public/img/avatar/${avatar}`)
+        avatar = `http://139.224.11.44:3000/public/img/avatar/${avatar}`/*http://localhost:3000*/
     } catch (e) {
         window.location.reload()
     }

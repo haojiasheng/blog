@@ -11,7 +11,7 @@ const pkg = require('./package');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(express.static(path.join(__dirname, 'APP/static')));
+app.use(express.static(path.join(__dirname, 'APP')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -35,8 +35,8 @@ app.use(function (req, res, next) {
         code: 0,
         msg: '操作成功！',
         data: null
-    };/*
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001")*/
+    };
+    res.setHeader("Access-Control-Allow-Origin", "http://139.224.11.44")/*http://localhost*/
     next()
 })
 
@@ -46,7 +46,7 @@ var debug = require('debug')('react-note:server');
 var http = require('http');
 
 
-var port = normalizePort(process.env.PORT || '80');
+var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 

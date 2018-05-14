@@ -31,7 +31,7 @@ function apiAxios (method, url, params) {
         url: url,
         data: method === 'POST' || method === 'PUT' ? params : null,
         params: method === 'GET' || method === 'DELETE' ? params : null,
-        baseURL: 'http://139.224.11.44/',
+        baseURL: 'http://139.224.11.44:3000/',/*http://localhost:3000*/
         withCredentials: false,
         headers: {'content-Type': 'application/x-www-form-urlencoded'}
     }).then((res) => {
