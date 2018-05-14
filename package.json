@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack-dev-server --open --mode development",
     "build": "webpack --mode production",
-    "start": "set NODE_ENV=production && pm2 start index.js --name 'jsblog'"
+    "start": "cross-env NODE_ENV=default pm2 start index.js --name 'jsblog'"
   },
   "author": "",
   "license": "ISC",
