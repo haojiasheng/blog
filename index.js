@@ -46,7 +46,7 @@ var debug = require('debug')('react-note:server');
 var http = require('http');
 
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '293');
 app.set('port', port);
 
 
