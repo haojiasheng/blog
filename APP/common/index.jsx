@@ -18,7 +18,7 @@ export class SignInput extends Component{
         const {text, type = 'text', content, diffStyle,borderStyle, placeText, contentInspect} = this.props;
         return (
             <label style={borderStyle} className={style.SignLabel}>
-                {text}:
+                <span>{text}:</span>
                 <input onChange={contentInspect} placeholder={placeText} type={type} style={diffStyle} ref={content} className={style.SignInput}/>
             </label>
         )
