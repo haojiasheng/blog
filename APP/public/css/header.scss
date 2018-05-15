@@ -29,6 +29,10 @@ header {
     left: 50%;
     transform: translateX(-50%);
     top: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 5rem;
   }
   span {
     display: inline-block;
