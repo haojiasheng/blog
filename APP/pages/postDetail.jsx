@@ -210,6 +210,9 @@ class postDetail extends Component{
         })
     }
     postComment (value) {
+        if (!value) {
+            return
+        }
         const login = App.checkCompetence.checkLogin(this);
         if (!login) {
             return
