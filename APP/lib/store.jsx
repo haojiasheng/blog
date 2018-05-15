@@ -59,7 +59,9 @@ function path(path = {
                 callback: null, /*点击回调函数*/
                 callbackState: 0, /*控制回调函数*/
                 state: false /*控制图片显示*/
-            }
+            },
+            userCallback: null, /*一些需要先得到用户信息的操作,这里存放回调函数*/
+            userCallbackState: 0 /*控制回调函数*/
         },
         search: {
             show: false, /*是否显示搜索框*/

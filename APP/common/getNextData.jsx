@@ -22,6 +22,10 @@ function getNextData(that, initData) {
         if (callbackState === 1) {
             that.path.header.right.callback = that.rightCallback;
         }
+        const userCallbackState = that.path.header.userCallbackState
+        if (userCallbackState) {
+            that.path.header.userCallback = that.userCallback;
+        }
         that.props.pageChange(that.path);
     };
 
@@ -46,7 +50,8 @@ function getNextData(that, initData) {
         if (componentWillUnmount) {
             componentWillUnmount()
         }
-        that.path.header.callback = null;
+        that.path.header.right.callback = null;
+        that.path.header.userCallback = null;
         that.unMount();
     }
 }

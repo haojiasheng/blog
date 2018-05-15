@@ -46,22 +46,39 @@ function RightDOM (props) {
 }
 
 class Header extends Component{
+    constructor (props) {
+        super(props);
+        this.state = {
+            user: false
+        }
+    }
     componentWillMount () {
         const {userInit} = this.props;
+        /*setTimeout(() => {
+            userInit(JSON.parse(localStorage.getItem('user')))
+            this.setState({
+                user: true
+            });
+        },1000);*/
         App.api.post('/user/init').then((res) => {
             if (res.code === 0) {
                 userInit(res.data);
             }
-        });/*
-        userInit(JSON.parse(localStorage.getItem('user')));*/
+            this.setState({
+                user: true
+            });
+        });
+    }
+    componentDidUpdate () {
+        this.userCallback(this.props)
     }
     render () {
         const location = this.context.router.route.location;
         const pathname = location.pathname + location.search;
-        let {path, user} = this.props;
+        let {user, path} = this.props;
         user = user || {};
-        let data = path[pathname] || path.init;
-        data = data.header;
+        path = path[pathname] || path.init;
+        const data = path.header;
         let left = data.left;
         let right = data.right;
         const avatar = user.avatar ? user.avatar : (user.gender === 'm' ? 'm.jpg' : 'w.jpg');
@@ -75,6 +92,21 @@ class Header extends Component{
                 </header>
             </div>
         )
+    }
+    userCallback (nextProps) {
+        const location = this.context.router.route.location;
+        const pathname = location.pathname + location.search;
+        const path = nextProps.path[pathname];
+        const {changePage} = nextProps;
+        if (path) {
+            if (path.header.userCallbackState === 1 && this.state.user) {
+                path.header.userCallback();
+                path.header.userCallbackState = 101;
+                changePage(path)
+            } else if (path.header.userCallbackState === 2 && this.state.user && path.header.userCallback) {
+                path.header.userCallback();
+            }
+        }
     }
     navigateTo (src) {
         this.context.router.history.push(src)

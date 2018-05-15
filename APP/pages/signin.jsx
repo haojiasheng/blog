@@ -6,21 +6,25 @@ import {SignInput, SignButton} from '../common/index';
 class SignIn extends Component{
     constructor (props) {
         super(props);
-        const login = App.checkCompetence.checkNotLogin(this);
-        if (login) {
-            return
-        }
+        this.userCallback = () => {
+            const login = App.checkCompetence.checkNotLogin(this);
+            if (login) {
+                return
+            }
+        };
         App.getNextData(this, {
             header: {
                 show: true,
-                content: '首页',
+                content: '登录',
                 left: {
                     back: true
                 },
                 right: {
                     content: '注册',
                     src: 'signUp'
-                }
+                },
+                userCallback: null,
+                userCallbackState: 2
             }
         });
         this.state = {

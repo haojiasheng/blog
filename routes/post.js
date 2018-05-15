@@ -45,7 +45,7 @@ router.post('/detail', function (req, res, next) {
     let data = req.sendData;
     const id = req.body.id;
     const userId = req.body.userId.toString().trim() || 1;
-    Promise.all([Post.getPostByid(id), Comment.getCommentByPostId(id, userId), Post.checkUserLike(id, userId), Post.getCollectCount(id), Post.checkUserCollect(id, userId)]).then(function (result) {
+    Promise.all([Post.getPostByid(id), Comment.getCommentByPostId(id, userId), Post.checkUserLike(id, userId)/*, Post.getCollectCount(id)*/, Post.checkUserCollect(id, userId)]).then(function (result) {
         let post = result[0];
         if (!post) {
             res.msg = '该文章不存在';
@@ -53,8 +53,12 @@ router.post('/detail', function (req, res, next) {
         }
         post.comments = result[1];
         post.like = !!result[2];
-        post.collectCount = result[3];
-        post.collect = !!result[4];
+        if (post.collect) {
+            post.collectCount = post.collect.length;
+        } else {
+            post.collectCount = 0;
+        }
+        post.collect = !!result[3];
         data.data = post;
         return res.json(data);
     })

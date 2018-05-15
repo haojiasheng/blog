@@ -12,6 +12,9 @@ class postDetail extends Component{
         this.rightCallback = () => {  /*header右边回调函数*/
             this.addCollect()
         };
+        this.userCallback = () => { /*user接口回调函数*/
+            this.loadData()
+        };
         App.getNextData(this, {
             header: {
                 show: true,
@@ -25,7 +28,9 @@ class postDetail extends Component{
                     callback: null,
                     state: false,
                     callbackState: 1
-                }
+                },
+                userCallbackState: 1,
+                userCallback: null
             },
             data: {
                 post: null,
@@ -35,13 +40,7 @@ class postDetail extends Component{
                 loadMessage: ''
             }
         });
-        let {user} = this.props;
-        while (!user) {
-            user = this.props;
-        }
-        this.loadData();
         this.posts = this.props.posts;
-        console.log(this.posts)
     }
     render () {
         let {post, loadAnimation, loadMessage, like} = this.path.data;
@@ -267,6 +266,12 @@ function mapDispatchToProps(dispatch) {
             dispatch({
                 type: 'postsChange',
                 posts
+            })
+        },
+        userInit (data) {
+            dispatch({
+                type: 'userInit',
+                user: data
             })
         }
     }

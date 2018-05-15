@@ -54,7 +54,7 @@ class Main extends Component{
                 App.prompt(res.msg);
                 if (res.code === 0) {
                     signUp(res.data);/*
-                    localStorage.setItem('user', JSON.stringify(res.data))*/
+                    localStorage.setItem('user', JSON.stringify(res.data));*/
                     history.goBack();
                 }
             })

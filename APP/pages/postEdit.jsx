@@ -8,10 +8,12 @@ class PostEdit extends Component{
         this.rightCallback = () => {
             this.postCreate()
         };
-        const login = App.checkCompetence.checkLogin(this, true);
-        if (!login) {
-            return
-        }
+        this.userCallback = () => {
+            const login = App.checkCompetence.checkLogin(this, true);
+            if (!login) {
+                return
+            }
+        };
         App.getNextData(this, {
             header: {
                 content: '发布',
@@ -23,7 +25,9 @@ class PostEdit extends Component{
                     content: '发布',
                     callbackState: 1,
                     callback: null
-                }
+                },
+                userCallbackState: 2,
+                userCallback: null
             }
         });
         this.state = {

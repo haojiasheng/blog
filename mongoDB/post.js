@@ -60,10 +60,10 @@ module.exports = {
     },
     userUnCollect (postId, userId) {
         return Post.update({_id: postId}, {$pull: {collect: userId}}).exec();
-    },
+    },/*
     getCollectCount (postId) {
         return Post.count({_id: postId}).exec();
-    },
+    },*/
     checkUserCollect (postId, userId) {
         return Post.count({_id: postId, collect: userId}).exec();
     },
