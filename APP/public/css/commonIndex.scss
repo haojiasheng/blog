@@ -24,11 +24,11 @@ $sign_width: 8.5rem;
   line-height: 1.39rem;
   overflow: hidden;
   @include sign_font;
-  &::before {
-    content: '*';
-  }
   span{
     flex-shrink: 0;
+    &::before {
+      content: '*';
+    }
   }
   .SignInput {
     background: rgba(255,255,255,0);
