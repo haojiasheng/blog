@@ -6,5 +6,5 @@ module.exports = {
         maxAge: 2592000000
     },
     mongodb: 'mongodb://localhost:27017/hjsBlog',
-    domainName: 'http://localhost'/*http://139.224.11.44*/
+    domainName: 'http://139.224.11.44'/*http://localhost*/
 };
