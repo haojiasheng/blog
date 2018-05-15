@@ -30,7 +30,7 @@ class Side extends Component{
         this.path.side.show = false;
         this.sideDiv.classList.add(style.disAppear);
         setTimeout(() => {
-            pageChange(path)
+            pageChange(this.path)
         },500)
     }
     signOut () {
