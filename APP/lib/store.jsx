@@ -18,6 +18,8 @@ function user(user = null, action) {
     switch (action.type) {
         case 'userInit':
             return action.user || null;
+        case 'signOut':
+            return null;
         default:
             return user
     }

@@ -1,4 +1,5 @@
 import axios from  'axios';
+import config from '../../config/default';
 
 function toType (obj) {
     return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
@@ -31,7 +32,7 @@ function apiAxios (method, url, params) {
         url: url,
         data: method === 'POST' || method === 'PUT' ? params : null,
         params: method === 'GET' || method === 'DELETE' ? params : null,
-        baseURL: 'http://139.224.11.44:3000/',/*http://localhost:3000*/
+        baseURL: `${config.domainName}/`,
         withCredentials: false,
         headers: {'content-Type': 'application/x-www-form-urlencoded'}
     }).then((res) => {

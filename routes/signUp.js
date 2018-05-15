@@ -17,12 +17,12 @@ var createFolder = function(folder){
     }
 };
 
-var uploadFolder = './APP/public/img/avatar/';
+var uploadFolder = './static/public/img/avatar/';
 createFolder(uploadFolder);
 
 
 router.use(require('express-formidable')({
-    uploadDir: path.join(__dirname, '../APP/public/img/avatar'),
+    uploadDir: path.join(__dirname, '../static/public/img/avatar'),
     keepExtensions: true
 }));
 

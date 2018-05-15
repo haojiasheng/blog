@@ -75,8 +75,8 @@ class SignIn extends Component{
             };
             App.api.post('/user/signIn', params).then((res) => {
                 if (res.code === 0) {
-                    userInit(res.data);
-                    localStorage.setItem('user', JSON.stringify(res.data));
+                    userInit(res.data);/*
+                    localStorage.setItem('user', JSON.stringify(res.data));*/
                     history.goBack()
                 }
                 App.prompt(res.msg)

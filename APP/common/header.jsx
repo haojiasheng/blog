@@ -2,14 +2,11 @@ import React,{Component} from 'react';
 import style from '../public/css/header.scss';
 import {connect}  from 'react-redux';
 import PropTypes from 'prop-types';
+import config from '../../config/default';
 
 function LeftDOM(props) {
     let {left, user, avatar, that} = props;
-    try {
-        avatar = `http://139.224.11.44:3000/public/img/avatar/${avatar}`/*http://localhost:3000*/
-    } catch (e) {
-        window.location.reload()
-    }
+    avatar = `${config.domainName}/public/img/avatar/${avatar}`;
     if (left.avatar && user.Email) {
         return (
             <div className={style.avatar}>
@@ -51,12 +48,12 @@ function RightDOM (props) {
 class Header extends Component{
     componentWillMount () {
         const {userInit} = this.props;
-        App.api.get('/user/init').then((res) => {
+        App.api.post('/user/init').then((res) => {
             if (res.code === 0) {
                 userInit(res.data);
             }
-        });
-        userInit(JSON.parse(localStorage.getItem('user')));
+        });/*
+        userInit(JSON.parse(localStorage.getItem('user')));*/
     }
     render () {
         const location = this.context.router.route.location;

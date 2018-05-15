@@ -23,14 +23,13 @@ module.exports = {
     createComment: function (comment) {
         return Comment
             .create(comment)
-            .populate({path: 'author', model: 'User'})
             .exec()
     },
     getCommentByPostId: function (postId, userId) {
         return Comment.find({postId: postId})
             .populate({path: 'author', model: 'User'})
-            .sort({_id: 1})
             .addCommentLike(userId)
+            .sort({_id: 1})
             .addCreatedAt()
             .exec();
     },

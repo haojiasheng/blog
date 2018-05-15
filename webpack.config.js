@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require("clean-webpack-plugin");
-let filename = 'APP/static';
+let filename = 'static';
 let devtool = 'source-map';
 let plugins = [
     new HtmlWebpackPlugin({
@@ -11,17 +11,18 @@ let plugins = [
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new ExtractTextPlugin("./css/[name]-[hash].css"),
-    new CleanWebpackPlugin(`${filename}/*`, {
+    new CleanWebpackPlugin(`${filename}`, {
         root: __dirname,
         verbose: true,
-        dry: false
+        dry: false,
+        exclude: ['public']
     })
 ];
 if (process.argv.includes('development')) {
     plugins.pop()
 }
 if (process.argv.includes('production')) {
-    filename = 'APP/static';
+    filename = 'static';
     devtool = 'none'
 }
 module.exports = {
@@ -30,12 +31,12 @@ module.exports = {
     output: {
         path: __dirname + '/'+filename,
         filename: 'build.js',
-        chunkFilename: '[name].[chunkhash:5].chunk.js',
+        chunkFilename: '[name].[chunkhash:5].chunk123.js',
         publicPath: '/'
     },
     devServer: {
-        contentBase: './APP/static',
-        port: 80,
+        contentBase: './static',
+        port: 3000,
         inline: true,
         historyApiFallback: true/*,
         openPage: 'index.ejs'*/,

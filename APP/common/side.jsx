@@ -2,36 +2,48 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import style from '../public/css/side.scss';
 import PropTypes from 'prop-types';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import config from '../../config/default';
+
 
 class Side extends Component{
     constructor (props) {
         super(props)
     }
     render () {
-        let {path, changePage, user} = this.props;
+        let {path, pageChange, user} = this.props;
         const {pathname} = this.context.router.history.location;
-        path[pathname] = path[pathname] || path.init;
-        const show = path[pathname].side.show;
+        this.path = path[pathname] || path.init;
+        const show = this.path.side.show;
         return (
             show && <div>
                 <div  ref={(sideDiv) => this.sideDiv = sideDiv } className={style.side}>
                     <User {...user}/>
-                    <NavList changePage={changePage} path={path} />
-                    <SignOut />
+                    <NavList pageChange={pageChange} path={this.path} />
+                    <SignOut signOut={this.signOut.bind(this)} />
                 </div>
                 <div  className={style.mask} onClick={this.sideDisappear.bind(this)}></div>
             </div>
         )
     }
     sideDisappear () {
-        const {changePage, path} = this.props;
-        const {pathname} = this.context.router.history.location;
-        path[pathname].side.show = false;
-        this.sideDiv.classList.add(style.disAppear)
+        const {pageChange} = this.props;
+        this.path.side.show = false;
+        this.sideDiv.classList.add(style.disAppear);
         setTimeout(() => {
-            changePage(path)
+            pageChange(path)
         },500)
+    }
+    signOut () {
+        const {signOut, pageChange} = this.props;
+        this.path.side.show = false;
+        App.api.post('/user/out').then((res) => {
+            if (res.code === 0) {
+                App.prompt(res.msg);
+                signOut();
+                pageChange(this.path)
+            }
+        })
+
     }
 }
 Side.contextTypes = {
@@ -40,11 +52,12 @@ Side.contextTypes = {
 
 class User extends Component{
     render () {
-        const {avatar, Email, gender, bio} = this.props;
+        let {avatar, Email, gender, bio} = this.props;
+        avatar = `${config.domainName}/public/img/avatar/${avatar}`
         return (
             <div className={style.user}>
                 <div className={style.avatar}>
-                    <img src={require(`../public/img/avatar/${avatar}`)} />
+                    <img src={avatar} />
                 </div>
                 <div className={style.userMsg}>
                     <div className={style.nikename}>
@@ -85,11 +98,11 @@ class NavList extends  Component{
         )
     }
     navigateTo (url) {
-        const {changePage, path} = this.props;
+        const {pageChange, path} = this.props;
         const {push, location:{pathname}} = this.context.router.history;
         if (pathname === url) {
             path[pathname].side.show = false;
-            changePage(path);
+            pageChange(path);
         } else {
             push(url)
         }
@@ -101,9 +114,10 @@ NavList.contextTypes = {
 
 class SignOut extends Component{
     render () {
+        const {signOut} = this.props
         return (
             <div className={style.signOut}>
-                <button>退出登录</button>
+                <button onClick={signOut}>退出登录</button>
             </div>
         )
     }
@@ -116,10 +130,15 @@ const mapStateToProps = (state) => ({
 
 function mapDispatchToProps (dispatch) {
     return {
-        changePage (data) {
+        pageChange (data) {
             dispatch({
                 type: 'pageChange',
                 path: data
+            })
+        },
+        signOut () {
+            dispatch({
+                type: 'signOut'
             })
         }
     }

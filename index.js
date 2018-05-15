@@ -7,11 +7,12 @@ const MongoStore = require('connect-mongo')(session);
 const config = require('config-lite')(__dirname);
 const bodyParser = require('body-parser');
 const pkg = require('./package');
+const fs = require('fs');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(express.static(path.join(__dirname, 'APP')));
+app.use(express.static(path.join(__dirname, 'static')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -36,8 +37,23 @@ app.use(function (req, res, next) {
         msg: '操作成功！',
         data: null
     };
-    res.setHeader("Access-Control-Allow-Origin", "http://139.224.11.44")/*http://localhost*/
+    res.setHeader("Access-Control-Allow-Origin", `${config.domainName}:3000`)
     next()
+})
+
+app.get('*', function (req, res, next) {
+    fs.readFile(path.resolve(__dirname,'static/index.html'), function(err, data){
+        if(err){
+            console.log(err);
+            res.send('后台错误');
+        } else {
+            res.writeHead(200, {
+                'Content-type': 'text/html',
+                'Connection':'keep-alive'
+            });
+            res.end(data);
+        }
+    });
 })
 
 router(app);
@@ -46,7 +62,7 @@ var debug = require('debug')('react-note:server');
 var http = require('http');
 
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '80');
 app.set('port', port);
 
 

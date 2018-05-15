@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import style from '../public/css/commonIndex.scss';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import config from '../../config/default';
 
 export class SignButton extends Component{
     render () {
@@ -98,20 +99,17 @@ export class SignGender extends Component{
 export class PostAvatar extends Component{
     render () {
         const {author, createAt} = this.props;
-        let bgAvatar = {};
-        if (author) {
-            try{
-                bgAvatar = {
-                    background: `url('http://139.224.11.44:3000/public/img/avatar/'${author.avatar}) no-repeat`,/*http://localhost*/
-                    backgroundSize: '1rem'
-                };
-            }catch (e) {
-                window.location.reload()
-            }
+        let bgAvatar = '';
+        if (author) {/*
+            bgAvatar = {
+                background: `url(') no-repeat`,
+                backgroundSize: '1rem'
+            };*/
+            bgAvatar = `${config.domainName}/public/img/avatar/${author.avatar}`
         }
         return (
             !!author && <div className={style.postAvatar}>
-                <span className={style.avatar} style={bgAvatar}></span>
+                <img className={style.avatar} src={bgAvatar} />
                 <div className={style.author}>
                     <span>{author.nikeName}</span>
                     <span className={style.howLong}>{moment(createAt).locale('zh-cn').startOf().fromNow()}</span>

@@ -4,7 +4,7 @@ const User = require('../mongoDB/user');
 const sha1 = require('sha1');
 
 
-router.get('/init', function (req, res, next) {
+router.post('/init', function (req, res, next) {
     let data = req.sendData;
     if (req.session.user) {
         data.data = req.session.user;
@@ -36,12 +36,12 @@ router.post('/signIn', function (req, res, next) {
         if (!user) {
             data.msg = '用户不存在';
             data.code = -1;
-            res.json(data);
+            return res.json(data);
         }
         if (sha1(password) !== user.password) {
             data.msg = '用户名或密码错误';
             data.code = -1;
-            res.json(data)
+            return res.json(data)
         }
         data.msg = '登陆成功!';
         delete user.password;
@@ -50,6 +50,13 @@ router.post('/signIn', function (req, res, next) {
         return res.json(data);
     })
         .catch(next)
+});
+
+router.post('/out', function (req, res, next) {
+    let data = req.sendData;
+    req.session.user = null;
+    data.msg = '退出登录成功'
+    return res.json(data)
 });
 
 module.exports = router;
