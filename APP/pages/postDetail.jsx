@@ -35,8 +35,13 @@ class postDetail extends Component{
                 loadMessage: ''
             }
         });
+        let {user} = this.props;
+        while (!user) {
+            user = this.props;
+        }
         this.loadData();
         this.posts = this.props.posts;
+        console.log(this.posts)
     }
     render () {
         let {post, loadAnimation, loadMessage, like} = this.path.data;
