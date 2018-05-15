@@ -22,13 +22,18 @@ $sign_width: 8.5rem;
   justify-content: center;
   align-items: flex-start;
   line-height: 1.39rem;
+  overflow: hidden;
   @include sign_font;
   &::before {
     content: '*';
   }
+  span{
+    flex-shrink: 0;
+  }
   .SignInput {
     background: rgba(255,255,255,0);
     border: 0rem;
+    flex-shrink: 1;
     height: 1.39rem;
     outline: none;
     padding-left: 0.3rem;
